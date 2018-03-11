@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0205cb8957891b44b142689caa23987, type: 3}
+  m_Name: RecorderWindowSettings
+  m_EditorClassIdentifier: 
+  m_Settings: {fileID: 114773884500415156}
+--- !u!114 &114773884500415156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6ee9a8f826ced34082d654155141a26, type: 3}
+  m_Name: Recorder Settings
+  m_EditorClassIdentifier: 
+  m_AssetID: ffee08a898e2aa74fbe1f76aa05c3e41
+  m_CaptureEveryNthFrame: 1
+  m_FrameRateMode: 1
+  m_FrameRate: 30
+  m_FrameRateExact: 1
+  m_StartFrame: 0
+  m_EndFrame: 10
+  m_StartTime: 0
+  m_EndTime: 1
+  m_DurationMode: 0
+  m_SynchFrameRate: 1
+  m_BaseFileName:
+    m_Pattern: DirectedGrowth2.<ext>
+  m_DestinationPath:
+    m_root: 0
+    m_leaf: C:/Users/zim/Documents/OneDrive - University College London/RC3_Term2/Tensegrity/UnityVideo/Graph
+  m_InputsSettings:
+    m_InputsSettingsAssets:
+    - {fileID: 114862973146917484}
+    ownerRecorderSettingsAssetId: ffee08a898e2aa74fbe1f76aa05c3e41
+  m_RecorderTypeName: UTJ.FrameCapturer.Recorders.MP4Recorder, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  m_MP4EncoderSettings:
+    video:
+      v: 1
+    videoWidth: 0
+    videoHeight: 0
+    videoTargetFramerate: 30
+    videoBitrateMode: 1
+    videoTargetBitrate: 1024000
+    videoFlags: 62
+    videoMaxTasks: 4
+    audio:
+      v: 1
+    audioSampleRate: 48000
+    audioNumChannels: 2
+    audioBitrateMode: 1
+    audioTargetBitrate: 128000
+    audioFlags: 6
+    audioMaxTasks: 4
+  m_AutoSelectBR: 1
+--- !u!114 &114862973146917484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d935bf7a4fcf66488738bda5536c1cb, type: 3}
+  m_Name: 9e52c703-8f15-4d38-b9a8-4ec69621e35c
+  m_EditorClassIdentifier: 
+  m_DisplayName: Pixels
+  m_Id: 7ca126b7-31c8-4479-9879-c3f95151d6bd
+  m_OutputSize: 0
+  m_AspectRatio: 0
+  m_ForceEvenSize: 1
+  source: 1
+  m_CameraTag: 
+  m_FlipFinalOutput: 1
+  m_AllowTransparency: 0
+  m_CaptureUI: 0
