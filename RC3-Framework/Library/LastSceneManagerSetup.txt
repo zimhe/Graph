@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Practice/Scenes/Directed Growth.unity
+- path: Assets/Practice/Scenes/04_Edge&Vertex.unity
   isLoaded: 1
   isActive: 1

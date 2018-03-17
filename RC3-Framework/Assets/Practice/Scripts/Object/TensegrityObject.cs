@@ -47,15 +47,14 @@ public class TensegrityObject : MonoBehaviour
     }
 
 
-
     public void SetupStructure(int _scale, int _state, int _index)
     {
         Scale = _scale;
         transform.localScale *= Scale;
         Index = _index;
-        
         SetState(_state);
     }
+
 
     void SetObj()
     {

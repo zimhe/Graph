@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 /*
  * Notes 
  */
- 
+
 namespace RC3
 {
     /// <summary>
-    /// 
+    /// Simple edge list representation of an undirected graph.
     /// </summary>
     public class EdgeGraph : IEdgeGraph
     {
@@ -22,46 +22,52 @@ namespace RC3
         #endregion
 
 
-        private List<List<int>> _adj;
-        private List<Edge> _edges;
+        private List<List<int>> _verts;
+        private List<int> _edges;
 
 
         /// <summary>
         /// 
         /// </summary>
-        public EdgeGraph(int vertexCapacity =  _defaultCapacity, int edgeCapacity = _defaultCapacity)
+        public EdgeGraph(int vertexCapacity = _defaultCapacity, int edgeCapacity = _defaultCapacity)
         {
-            _adj = new List<List<int>>(vertexCapacity);
-            _edges = new List<Edge>(edgeCapacity);
+            _verts = new List<List<int>>(vertexCapacity);
+            _edges = new List<int>(edgeCapacity << 1);
         }
 
 
         /// <summary>
-        /// 
+        /// Returns the number of vertices in the graph.
         /// </summary>
         public int VertexCount
         {
-            get { return _adj.Count; }
+            get { return _verts.Count; }
         }
 
-
         /// <summary>
-        /// 
+        /// Returns the number of edges in the graph.
         /// </summary>
         public int EdgeCount
         {
-            get { return _edges.Count; }
+            get { return _edges.Count >> 1; }
         }
 
 
         /// <summary>
-        /// 
+        /// Returns the degree of the given vertex.
         /// </summary>
-        /// <param name="vertex"></param>
-        /// <returns></returns>
         public int GetDegree(int vertex)
         {
-            return _adj[vertex].Count;
+            return _verts[vertex].Count;
+        }
+
+
+        /// <summary>
+        /// Adds a new vertex to the graph.
+        /// </summary>
+        public void AddVertex()
+        {
+            AddVertex(_defaultCapacity);
         }
 
 
@@ -70,56 +76,91 @@ namespace RC3
         /// </summary>
         public void AddVertex(int capacity = _defaultCapacity)
         {
-            _adj.Add(new List<int>(capacity));
+            _verts.Add(new List<int>(capacity));
         }
 
 
         /// <summary>
-        /// Adds an edge between the two given vertices.
+        /// Adds an edge between the given vertex.
         /// </summary>
         public void AddEdge(int v0, int v1)
         {
-            // add index of new edge to vertex lists
-            var ei = _edges.Count;
-            _adj[v0].Add(ei);
-            _adj[v1].Add(ei);
+            var e = _edges.Count >> 1;
+            _verts[v0].Add(e);
+            _verts[v1].Add(e);
 
-            // add new edge to edge list
-            _edges.Add(new Edge(v0, v1));
+            _edges.Add(v0);
+            _edges.Add(v1);
+        }
+
+        public int GetEdge(int index)
+        {
+            return _edges[index];
+        }
+        /// <summary>
+        /// Returns the vertex at the start of the given edge.
+        /// </summary>
+        public int GetStartVertex(int edge)
+        {
+            return _edges[edge << 1];
+        }
+
+
+        /// <summary>
+        /// Returns the vertex at the end of the given edge.
+        /// </summary>
+        public int GetEndVertex(int edge)
+        {
+            return _edges[(edge << 1) + 1];
         }
 
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public Edge GetEdge(int index)
+        public int GetOppositeVertex(int edge, int vertex)
         {
-            return _edges[index];
+            edge <<= 1;
+            var v0 = _edges[edge];
+            var v1 = _edges[edge + 1];
+            return vertex == v0 ? v1 : vertex == v1 ? v0 : -1;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int GetIncidentEdge(int vertex, int index)
+        {
+            return _verts[vertex][index];
         }
 
 
         /// <summary>
         /// Returns all edges incident to the given vertex.
         /// </summary>
-        /// <param name="vertex"></param>
-        /// <returns></returns>
         public IEnumerable<int> GetIncidentEdges(int vertex)
         {
-            return _adj[vertex];
+            return _verts[vertex];
         }
 
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="vertex"></param>
-        /// <returns></returns>
+        public int GetVertexNeighbor(int vertex, int index)
+        {
+            return GetOppositeVertex(_verts[vertex][index], vertex);
+        }
+
+
+        /// <summary>
+        /// Returns all vertices connected to the given vertex.
+        /// </summary>
         public IEnumerable<int> GetConnectedVertices(int vertex)
         {
-            foreach (var ei in _adj[vertex])
-                yield return _edges[ei].Other(vertex);
+            foreach (var e in _verts[vertex])
+                yield return GetOppositeVertex(e, vertex);
         }
     }
 }

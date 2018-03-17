@@ -112,7 +112,47 @@ namespace RC3
 
             return g;
         }
+        public G CreateTriangleGrid3D(int countX, int countZ,int countY)
+        {
+            var g = Create();
+            int n = countX * countZ * countY;
 
+            // add vertices
+            for (int i = 0; i < n; i++)
+                g.AddVertex();
+
+
+            for (int y = 0; y < countY; y++)
+            {
+                // add even row edges
+                for (int z = 0; z < countZ; z += 2)
+                {
+                    for (int x = 0; x < countX; x++)
+                    {
+                        int i = x + z * countX+y*countX*countZ;
+                        if (x > 0) g.AddEdge(i, i - 1); // x-1
+                        if (z > 0) g.AddEdge(i, i - countX); // z-1
+                        if (z > 0 && x > 0) g.AddEdge(i, i - countX - 1);// z-1, x-1
+                        if(y>0) g.AddEdge(i,i-countX*countZ);//y-1
+                    }
+                }
+
+                // add odd row edges
+                for (int z = 1; z < countZ; z += 2)
+                {
+                    for (int x = 0; x < countX; x++)
+                    {
+                        int i = x + z * countX+y * countX * countZ; ;
+                        if (x > 0) g.AddEdge(i, i - 1); // x-1
+                        if (z > 0) g.AddEdge(i, i - countX); // z-1
+                        if (z > 0 && x < countX - 1) g.AddEdge(i, i - countX + 1); // y-1, x+1
+                        if(y>0) g.AddEdge(i,i-countX*countZ);//y-1
+                    }
+                }
+            }
+
+            return g;
+        }
 
         /// <summary>
         /// 

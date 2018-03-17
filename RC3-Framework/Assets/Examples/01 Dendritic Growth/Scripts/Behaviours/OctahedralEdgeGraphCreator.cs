@@ -83,15 +83,15 @@ namespace RC3.Unity.Examples.DendriticGrowth
         /// </summary>
         private IEnumerable<EdgeObject> CreateEdgeObjects()
         {
-            var graph = _grid.Graph;
+            var graph = _grid.edgeGraph;
             var verts = _grid.VertexObjects;
 
             for (int i = 0; i < graph.EdgeCount; i++)
             {
-                var e = graph.GetEdge(i);
+                //var e = graph.GetEdge(i);
 
-                var p0 = verts[e.Start].transform.position;
-                var p1 = verts[e.End].transform.position;
+                var p0 = verts[graph.GetStartVertex(i)].transform.position;
+                var p1 = verts[graph.GetEndVertex(i)].transform.position;
 
                 var eObj = Instantiate(_edgeObject, transform);
                 eObj.Index = i;
