@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: ea11a8d267d5d024b9728d28dfb20eed
+timeCreated: 1520741596
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Helvetica Condensed
+  fontNames:
+  - Helvetica Condensed
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 0fbc9ee762930264c89afeee9fc03b3c, type: 3}
+  - {fileID: 12800000, guid: c015c419a9a2d5548ae751f987740463, type: 3}
+  - {fileID: 12800000, guid: bd8d19ee2a3b2a54f929a5a093fd050a, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

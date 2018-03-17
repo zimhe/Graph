@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: 297b3381add0ed74f8b09805e12d69f8
+timeCreated: 1520741595
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Helvetica Narrow
+  fontNames:
+  - Helvetica Narrow
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 26282d12a5df1ce4fb8c521b57541763, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

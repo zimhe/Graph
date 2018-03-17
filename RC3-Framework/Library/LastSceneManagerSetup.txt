@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Practice/Scenes/Directed Growth.unity
+- path: Assets/Practice/Scenes/Practice 2.unity
   isLoaded: 1
   isActive: 1
