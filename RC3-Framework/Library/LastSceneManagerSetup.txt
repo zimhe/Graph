@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Practice/Scenes/04_Edge&Vertex.unity
+- path: Assets/Practice/Scenes/05_Edge&Vertex&Noise.unity
   isLoaded: 1
   isActive: 1

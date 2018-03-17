@@ -18,6 +18,13 @@ public class HexigonGraphManager : MonoBehaviour
     [SerializeField] private int Scale = 1;
     [SerializeField] int DefState;
 
+    private TensileEdge[,] EdgeObj2d;
+
+    private TensileTriangle[] Triangle;
+    private int[] TriangleVerts;
+
+    private List<Vector3> P=new List<Vector3>();
+
     public SharedEdgeGraph _hexGrid()
     {
         return _edgeGraph;
@@ -45,7 +52,24 @@ public class HexigonGraphManager : MonoBehaviour
         _edgeGraph.TensileEdgeObjects.AddRange(CreatEdgeObjects());
         ConnectEdgeToVert();
 
+        
+
         transform.position = new Vector3(-countX * 0.5f, -countY * 0.5f, -countZ * 0.5f);
+    }
+
+    void Start()
+    {
+        Triangle = CreateTriangle().ToArray();
+        LineRenderer lr = new LineRenderer();
+        for (int i = 0; i < TriangleVerts.Length; i += 2)
+        {
+            int v0 = TriangleVerts[i];
+            int v1 = TriangleVerts[i + 1];
+
+            Debug.DrawLine(P[v0],P[v1]);
+
+   
+        }
     }
 
     IEnumerable<TensileVertex> CreatVertexObjects()
@@ -67,6 +91,7 @@ public class HexigonGraphManager : MonoBehaviour
     {
         List< TensileEdge> EObj=new List<TensileEdge>();
 
+
         var graph = _edgeGraph.edgeGraph;
 
         for (int i = 0; i < graph.EdgeCount; i++)
@@ -81,10 +106,63 @@ public class HexigonGraphManager : MonoBehaviour
                 var eObj = Instantiate(TGEdgePrefab, transform);
                 eObj.SetupStructure(Scale, DefState, S, E, SetVertexPosition());
                 EObj.Add(eObj);
-
+               // EdgeObj2d[S, E] = eObj;
             }
         }
         return EObj;
+    }
+
+    IEnumerable<TensileTriangle> CreateTriangle()
+    {
+        List<TensileTriangle> T = new List<TensileTriangle>();
+      
+
+        int xSize = countX - 1;
+        int zSize = countZ - 1;
+        int[] triangles = new int[xSize * zSize * 6 * countY];
+        for (int y = 0, ti = 0, vi = 0; y < countY; y++)
+        {
+            for (int z = 0; z < zSize; z++, vi++)
+            {
+                for (int x = 0; x < xSize; x++, ti += 6, vi++)
+                {
+                    if (y % 2 == 0)
+                    {
+                        //if (x < xSize - 1)
+                        {
+                            triangles[ti] = vi;
+                            triangles[ti + 3] = triangles[ti + 2] = vi + 1;
+                            triangles[ti + 4] = triangles[ti + 1] = vi + xSize + 1;
+                            triangles[ti + 5] = vi + xSize + 2;
+                        }
+                    }
+                    else
+                    {
+                        triangles[ti] = triangles[ti + 3] = vi;
+                        triangles[ti + 1] = vi + xSize + 1;
+                        triangles[ti + 2] = triangles[ti + 4] = vi + xSize + 2;
+                        triangles[ti + 5] = vi + 1;
+                    }
+                }
+            }
+        }
+
+        TriangleVerts = triangles;
+        for (int i = 0; i < triangles.Length; i += 3)
+        {
+            TensileTriangle Tri = new TensileTriangle();
+            int v0 = triangles[i];
+            int v1 = triangles[i + 1];
+            int v2 = triangles[i + 2];
+
+            print(v0 + "" + v1 + "" + v2);
+
+            Tri.SetupTriangle(v0, v1, v2, P);
+
+           
+            T.Add(Tri);
+        }
+        return T;
     }
 
     void ConnectEdgeToVert()
@@ -129,6 +207,7 @@ public class HexigonGraphManager : MonoBehaviour
                 }
             }
         }
+        P.AddRange(_positions);
 
         return _positions;
     }
@@ -171,10 +250,7 @@ public class HexigonGraphManager : MonoBehaviour
     }
 
     // Use this for initialization
-    void Start ()
-    {
-        
-	}
+   
 	
 	// Update is called once per frame
 	void Update () {
