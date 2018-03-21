@@ -7,6 +7,7 @@ using RC3.Unity;
 using RC3.Unity.Examples.DendriticGrowth;
 using SpatialSlur.SlurData;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HexigonGrowthManager : MonoBehaviour
 {
@@ -16,11 +17,15 @@ public class HexigonGrowthManager : MonoBehaviour
     List<TensileVertex> TenVertex;
     List<TensileEdge> TenEdge;
 
+    [SerializeField] private ButtonImageHandler directBtn;
+
+    private bool GraphDone;
+
     private Queue<int> _sourceQueue;
     private Queue<int> _queue;
     private PriorityQueue<float, int> _proQueue = new PriorityQueue<float, int>();
     private List<int> Sources;
-    private bool Grow = false;  
+    private bool GrowDirect = false;  
 
     private int Frame = 0;
 
@@ -33,45 +38,55 @@ public class HexigonGrowthManager : MonoBehaviour
     private int countZ;
 
 
+
+   
+
+
     void  getShortestSourcePath()
     {
-        Queue<int> _tempQueue = new Queue<int>();
-        _sourceQueue = new Queue<int>();
+        if (GraphDone == true)
+        {
+            Queue<int> _tempQueue = new Queue<int>();
+            _sourceQueue = new Queue<int>();
 
-        List<int> _tempSources = new List<int>(Sources.ToArray());
+            List<int> _tempSources = new List<int>(Sources.Count);
+            _tempSources.AddRange(Sources);
 
-        //_sourceQueue.Enqueue(Sources [0]);
-        _tempQueue.Enqueue(_tempSources [0]);
-        _tempSources.Remove(_tempSources[0]);
+            var next = _tempSources[0];
+            //_sourceQueue.Enqueue(Sources [0]);
+            _tempQueue.Enqueue(next);
+            _tempSources.Remove(next);
 
-        for (int i = 0; i <Sources .Count -1; i++)
-        { 
-            
-            int minIndex = 0;
-            float minDistance = float.MaxValue;
 
-            int v = _tempQueue.Dequeue();
 
-            foreach (var src in _tempSources)
+            for (int i = 0; i < Sources.Count - 1; i++)
             {
-                var p0 = TenVertex[v].transform.position;
-                var p1 = TenVertex[src].transform.position;
-                var d = p1 - p0;
-                var _d = d.magnitude;
 
-                if (minDistance > _d && _d != 0)
+                int minIndex = 0;
+                float minDistance = float.MaxValue;
+
+                int v = _tempQueue.Dequeue();
+
+                foreach (var src in _tempSources)
                 {
-                    minDistance = _d;
-                    minIndex = src;
+                    var p0 = TenVertex[v].transform.localPosition;
+                    var p1 = TenVertex[src].transform.localPosition;
+                    var d = p1 - p0;
+                    var _d = d.magnitude;
+
+                    if (minDistance > _d && _d != 0)
+                    {
+                        minDistance = _d;
+                        minIndex = src;
+                    }
                 }
+                _tempQueue.Enqueue(minIndex);
+                _sourceQueue.Enqueue(minIndex);
+                _tempSources.Remove(minIndex);
             }
-            _tempQueue.Enqueue(minIndex);
-            _sourceQueue.Enqueue(minIndex);
-            _tempSources.Remove(minIndex);
+
+            _proQueue.Insert(0f, Sources[0]);
         }
-
-        _proQueue.Insert(0f, Sources[0]);
-
     }
 
    
@@ -79,12 +94,16 @@ public class HexigonGrowthManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        //HexigonGrid = transform.GetComponent<ShiftedGraphManager>().HexigonGrid();
-        //HexigonGrid = transform.GetComponent<GraphManager>().HexigonGrid();
-        HexigonGrid = transform.GetComponent<HexigonGraphManager>()._hexGrid();
-        GraphManager = transform.GetComponent<HexigonGraphManager>();
-        //HexigonGrid = transform.GetComponent<HexigonGraphManager>().();
+        //initializeGrowther();
+    }
 
+    public void initializeGrowther()
+    {
+        GraphManager = transform.GetComponent<HexigonGraphManager>();
+
+        GraphDone = GraphManager.GraphReady();
+
+        HexigonGrid = GraphManager._hexGrid();
         _graph = HexigonGrid.edgeGraph;
         Depth = new int[_graph.VertexCount];
         TenVertex = HexigonGrid.TensileVertexObjects;
@@ -92,39 +111,48 @@ public class HexigonGrowthManager : MonoBehaviour
         _queue = new Queue<int>();
         _sourceQueue = new Queue<int>();
 
+
         countX = GraphManager.GetCountX();
         countY = GraphManager.GetCountY();
         countZ = GraphManager.GetCountZ();
     }
 
-    void ResetGrowth()
+
+
+    public void ResetGrowth()
     {
         _queue.Clear();
 
         foreach (var t in TenVertex)
         {
-            t.SetState(0);
+           t.SetAllState(0,0);
         }
 
         foreach (var e in TenEdge)
         {
-            e.SetState(0);
+          e.SetAllState(0,0);
         }
 
-        Grow = false;
+        GrowDirect = false;
         Frame = 0;
-        Sources.Clear();
+        if (Sources != null)
+        {
+            Sources.Clear();
+        }
+
+        if (_sourceQueue != null)
+        {
+            _sourceQueue.Clear();
+        }
         SourceCreated = false;
-        _sourceQueue.Clear();
         _proQueue = new PriorityQueue<float, int>();
         S_Inx = 0;
-
     }
 
 
     void UpdateGrowth()
     {
-        if (Grow == true)
+        if (GrowSpread == true)
         {
             if (_queue.Count == 0)
             {
@@ -170,54 +198,102 @@ public class HexigonGrowthManager : MonoBehaviour
 
                 //t.UpdateToFuture();
                 Frame++;
+                foreach (var E in HexigonGrid.TensileEdgeObjects)
+                {
+                    int St = E.StartVertice;
+                    int Ed = E.EndVertice;
+                    int SState = HexigonGrid.TensileVertexObjects[St].State;
+                    int EState = HexigonGrid.TensileVertexObjects[Ed].State;
+
+                    if (SState != 0 && EState != 0)
+                    {
+                        E.SetState(2);
+                    }
+                }
 
             }
         }
     }
 
-    void ChangeLook(int _subState)
+    public void ChangeLook(int _subState)
     {
-        foreach (var t in TenVertex)
+        if (GraphDone == true)
         {
-            if (t.State!=0)
+            foreach (var t in TenVertex)
             {
-                t.SetState(2);
-                t.SetSubState(_subState);
-            }
-        }
+                if (t.State != 0)
+                {
+                    if (t.State != 2)
+                    {
+                        t.SetAllState(2, _subState);
+                    }
+                    else
+                    {
+                        t.SetSubState(_subState);
+                    }
 
-        foreach (var TE in TenEdge)
-        {
-            if (TE.State != 0)
+                }
+            }
+            foreach (var TE in TenEdge)
             {
-                TE.SetState(2);
-                TE.SetSubState(_subState);
+                if (TE.State != 0)
+                {
+                    if (TE.State != 2)
+                    {
+                        TE.SetAllState(2, _subState);
+                    }
+                    else
+                    {
+                        TE.SetSubState(_subState);
+                    }
+                }
             }
         }
     }
 
     void getDepth()
     {
-        GraphUtil.GetVertexEdgeDepths(_graph, SourceRO(), Depth);
+        if (GraphDone == true)
+        {
+            GraphUtil.GetVertexEdgeDepths(_graph, SourceRO(), Depth);
+        }
     }
 
-
-
-    void CreatSourceRdm()
+    void CreatSourceRdm(int _percentage)
     {
-        Sources = new List<int>();
-        System.Random Random = new System.Random();
-        int SourceCount = (int)TenVertex.Count / 50;
-        for (int i = 0; i < SourceCount; i++)
+        if (GraphDone == true)
         {
-            int _source = Random.Next(0, TenVertex.Count);
+            System.Random Random = new System.Random();
+            int SourceCount = Mathf.FloorToInt(TenVertex.Count * (_percentage * 0.01f));
 
-            Sources.Add(_source);
-        }
-        foreach (int src in Sources)
-        {
-            _queue.Enqueue(src);
-            TenVertex[src].SetState(1);
+
+            if (Sources != null && Sources.Count != 0)
+            {
+
+                foreach (var tv in TenVertex)
+                {
+                    if (tv.State != 0)
+                    {
+                        tv.SetState(0);
+                    }
+                }
+
+                Sources = new List<int>(SourceCount);
+            }
+            else
+            {
+                Sources = new List<int>(SourceCount);
+            }
+
+            for (int i = 0; i <= SourceCount; i++)
+            {
+
+                int _source = Random.Next(0, TenVertex.Count);
+
+                Sources.Add(_source);
+                TenVertex[_source].SetState(1);
+                _queue.Enqueue(_source);
+            }
         }
     }
 
@@ -330,9 +406,26 @@ public class HexigonGrowthManager : MonoBehaviour
         foreach (int src in Sources)
         {
             _queue.Enqueue(src);
-            //TenVertex[src].SetState(1);
+             //TenVertex[src].SetState(1);
         }
     }
+
+    public void TurnOnAll()
+    {
+        if (GraphDone == true&&GrowSpread==false&&GrowDirect==false)
+        {
+            foreach (var tv in TenVertex)
+            {
+                tv.SetAllState(2,1);
+            }
+
+            foreach (var te in TenEdge)
+            {
+                te.SetAllState(2,1);
+            }
+        }
+    }
+
 
     IEnumerable<int> SourceRO()
     {
@@ -367,7 +460,7 @@ public class HexigonGrowthManager : MonoBehaviour
 
     void UpdateDirectedGrowth()
     {
-        if (Grow == true&&_sourceQueue .Count !=0)
+        if (GrowDirect == true&&_sourceQueue .Count !=0)
         {
           
            //for (int i = 0; i < _sourceQueue.Count; i++)
@@ -376,50 +469,49 @@ public class HexigonGrowthManager : MonoBehaviour
                 int vertex;
                 _proQueue.RemoveMin(out key, out vertex);
                 var T = _sourceQueue.ToArray();
+
+
                 foreach (var vi in _graph.GetConnectedVertices(vertex))
                 {
-                    var target = T[S_Inx];
 
+                    int target = T[S_Inx];
+
+                
                     if (vi == target)
                     {
-                        print("reached");
-
-                        _proQueue =new PriorityQueue<float, int>();
+                        _proQueue = new PriorityQueue<float, int>();
                         _proQueue.Insert(0f, target);
 
-                  
-                        if (S_Inx < T.Length-1)
+                        if (S_Inx < T.Length - 1)
                         {
                             S_Inx++;
                             target = T[S_Inx];
                         }
                         else
                         {
-                            Grow = false;
+                            GrowDirect = false;
+                            directBtn.SetTexture(true);
+                            print("done");
                         }
                     }
 
-                    if (Depth[vi] > 4)
-                    {
-                        //return;
-                    }
                     var t = TenVertex[vi];
                     int nc = NeighborCount(vi);
                     if ( nc <4)
                     {
-                        _proQueue.Insert(GetKey(vi, target), vi);
                         if (nc < 3)
                         {
                             if (t.State == 0)
                                 t.SetState(2);
                         }
+                        _proQueue.Insert(GetKey(vi, target), vi);
                     }
                 }
 
                 foreach (var E in HexigonGrid.TensileEdgeObjects)
                 {
-                    int St = E.Start;
-                    int Ed = E.End;
+                    int St = E.StartVertice;
+                    int Ed = E.EndVertice;
                     int SState = HexigonGrid.TensileVertexObjects[St].State;
                     int EState = HexigonGrid.TensileVertexObjects[Ed].State;
 
@@ -442,9 +534,6 @@ public class HexigonGrowthManager : MonoBehaviour
                     {
                         edgeCount += edge.State;
                     }
-
-                
-
                     if (i >=LayerCount)
                     {
                         int below = i - LayerCount;
@@ -520,73 +609,52 @@ public class HexigonGrowthManager : MonoBehaviour
     private bool SourceCreated;
 
 
+    public void GenerateSource()
+    {
+        CreatSourceRdm(3);
+        getShortestSourcePath();
+        getDepth();
+    }
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            CreatSourceRdm();
+     
 
-            //SourceCreated = true;
-            getShortestSourcePath();
-            getDepth();
-        }
-        if (Input.GetKeyDown(KeyCode.A))
+        if (GraphDone == true)
         {
-            CreatSource();
-            SourceCreated = true;
+            UpdateGrowth();
+            UpdateDirectedGrowth();
         }
-
-        if (Input.GetKeyDown((KeyCode.Space)))
-        {
-            if (Grow == false)
-            {
-                Grow = true;
-            }
-            else
-            {
-                Grow = false;
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            ResetGrowth();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            ChangeLook(1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            ChangeLook(2);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            ChangeLook(3);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            ChangeLook(0);
-        }
-
-        // UpdateGrowth();
-
-        if (SourceCreated == true)
-        {
-            if (Frame < countY - 1)
-            {
-                CalculateSource();
-                SaveSource();
-                Frame++;
-            }
-            else
-            {
-                getShortestSourcePath();
-                getDepth();
-            }
-        }
-        UpdateDirectedGrowth();
     }
+
+    private bool GrowSpread;
+
+    public void GrowthToggleDirect()
+    {
+        GrowSpread = false;
+        if (GrowDirect == false)
+        {
+            GrowDirect = true;
+        }
+        else
+        {
+            GrowDirect = false;
+        }
+    }
+    public void GrowthToggleSpread()
+    {
+        GrowDirect = false;
+        if (GrowSpread == false)
+        {
+            GrowSpread = true;
+           
+
+        }
+        else
+        {
+            GrowSpread = false;
+        }
+    }
+
 }
 

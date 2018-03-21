@@ -105,7 +105,7 @@ namespace UnityEngine.Recorder.Input
             if( rtsSettings.m_FlipFinalOutput )
                 m_VFlipper = new TextureFlipper();
 
-            // Below here is considered 'void Start()', but we run it for directly "various reasons".
+            // Below here is considered 'void StartVertice()', but we run it for directly "various reasons".
             if (rtsSettings.m_OutputSize > rtsSettings.m_RenderSize)
                 throw new UnityException("Upscaling is not supported! Output dimension must be smaller or equal to render dimension.");
 

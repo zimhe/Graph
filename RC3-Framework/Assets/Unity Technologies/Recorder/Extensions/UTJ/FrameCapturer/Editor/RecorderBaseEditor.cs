@@ -94,7 +94,7 @@ namespace UTJ.FrameCapturer
                 EditorGUILayout.Space();
                 if (!recorder.isRecording)
                 {
-                    if (GUILayout.Button("Start Recording"))
+                    if (GUILayout.Button("StartVertice Recording"))
                     {
                         if (!EditorApplication.isPlaying)
                         {
@@ -109,7 +109,7 @@ namespace UTJ.FrameCapturer
                 }
                 else
                 {
-                    if (GUILayout.Button("End Recording"))
+                    if (GUILayout.Button("EndVertice Recording"))
                     {
                         recorder.EndRecording();
                     }

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 /*
  * Notes 
@@ -24,6 +25,7 @@ namespace RC3
 
         private List<List<int>> _verts;
         private List<int> _edges;
+        private List<List<int>> _triangles;
 
 
         /// <summary>
@@ -33,6 +35,7 @@ namespace RC3
         {
             _verts = new List<List<int>>(vertexCapacity);
             _edges = new List<int>(edgeCapacity << 1);
+            _triangles=new List<List<int>>();
         }
 
 

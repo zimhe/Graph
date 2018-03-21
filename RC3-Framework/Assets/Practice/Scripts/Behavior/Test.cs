@@ -22,7 +22,7 @@ public class Test : MonoBehaviour
 	   
         Obj = A;
 	    print("B");
-        //  GameObject Bar = Instantiate(Bars, transform);
+        //  GameObject Bar = Instantiate(StaticBar, transform);
 
     }
 	

@@ -33,7 +33,7 @@ namespace UnityEditor.Recorder.Input
                 Debug.Log("AudioInput could not find " + className + " type in " + dllName);
                 return;
             }
-            m_StartMethod = audioRecorderType.GetMethod("Start");
+            m_StartMethod = audioRecorderType.GetMethod("StartVertice");
             m_StopMethod = audioRecorderType.GetMethod("Stop");
             m_GetSampleCountForCaptureFrameMethod =
                 audioRecorderType.GetMethod("GetSampleCountForCaptureFrame");

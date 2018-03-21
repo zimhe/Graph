@@ -23,7 +23,7 @@ namespace UnityEditor.Recorder
         BinaryWriter binwriter;
 
         // Use this for initialization
-        public void Start (string filename)
+        public void StartVertice (string filename)
         {
             var stream = new FileStream (filename, FileMode.Create);
             binwriter = new BinaryWriter (stream);
@@ -191,7 +191,7 @@ namespace UnityEditor.Recorder
                     "recording of " + audioSettings.m_AudioMixerGroups[n].m_MixerGroup.name + ".wav");
                 if (Verbose.enabled)
                     Debug.Log("Starting wav recording into file " + path);
-                m_WavWriters[n].Start(path);
+                m_WavWriters[n].StartVertice(path);
             }
 #endif
 

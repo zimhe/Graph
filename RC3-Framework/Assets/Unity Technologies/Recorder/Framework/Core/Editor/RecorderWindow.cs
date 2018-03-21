@@ -176,7 +176,7 @@ namespace UnityEditor.Recorder
                     var errors = new List<string>();
                     using (new EditorGUI.DisabledScope(!m_Editor.ValidityCheck(errors)))
                     {
-                        if (GUILayout.Button("Start Recording"))
+                        if (GUILayout.Button("StartVertice Recording"))
                             StartRecording();
                     }
                     break;
@@ -196,7 +196,7 @@ namespace UnityEditor.Recorder
                     var recorderGO = SceneHook.FindRecorder((RecorderSettings)m_Editor.target);
                     if (recorderGO == null)
                     {
-                        GUILayout.Button("Start Recording"); // just to keep the ui system happy.
+                        GUILayout.Button("StartVertice Recording"); // just to keep the ui system happy.
                         m_State = EState.Idle;
                         m_FrameCount = 0;
                     }

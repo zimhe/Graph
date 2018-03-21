@@ -302,8 +302,8 @@ namespace UnityEditor.Recorder
                 }
                 case DurationMode.TimeInterval:
                 {
-                    AddProperty(m_StartTime, () => EditorGUILayout.PropertyField(m_StartTime, new GUIContent("Start (sec)")));
-                    AddProperty(m_EndFrame, () => EditorGUILayout.PropertyField(m_EndTime, new GUIContent("End (sec)")));
+                    AddProperty(m_StartTime, () => EditorGUILayout.PropertyField(m_StartTime, new GUIContent("StartVertice (sec)")));
+                    AddProperty(m_EndFrame, () => EditorGUILayout.PropertyField(m_EndTime, new GUIContent("EndVertice (sec)")));
                     break;
                 }
             }

@@ -131,8 +131,8 @@ namespace RC3
                     {
                         int i = x + z * countX+y*countX*countZ;
                         if (x > 0) g.AddEdge(i, i - 1); // x-1
-                        if (z > 0) g.AddEdge(i, i - countX); // z-1
                         if (z > 0 && x > 0) g.AddEdge(i, i - countX - 1);// z-1, x-1
+                        if (z > 0) g.AddEdge(i, i - countX); // z-1
                         if(y>0) g.AddEdge(i,i-countX*countZ);//y-1
                     }
                 }
@@ -146,7 +146,7 @@ namespace RC3
                         if (x > 0) g.AddEdge(i, i - 1); // x-1
                         if (z > 0) g.AddEdge(i, i - countX); // z-1
                         if (z > 0 && x < countX - 1) g.AddEdge(i, i - countX + 1); // y-1, x+1
-                        if(y>0) g.AddEdge(i,i-countX*countZ);//y-1
+                        if (y>0) g.AddEdge(i,i-countX*countZ);//y-1
                     }
                 }
             }
