@@ -16,6 +16,8 @@ public class ButtonImageHandler : MonoBehaviour
 	{
 	    GetComponent<Image>().sprite = on;
 
+        GetComponent<Button>().onClick.AddListener(SwithTexture);
+
     }
 
     public void SwithTexture()

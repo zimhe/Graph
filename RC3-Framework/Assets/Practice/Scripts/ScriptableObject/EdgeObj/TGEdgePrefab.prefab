@@ -54,9 +54,9 @@ MonoBehaviour:
   EdgeIndicatorPFB: {fileID: 1982338887735204, guid: 8c09c4603bcca624f9481b988284604d,
     type: 2}
   ShapePFB: {fileID: 1673083690172570, guid: a34c6cd45ed7e1a428df0a07afeeecea, type: 2}
-  ShellPFB: {fileID: 1861974114204394, guid: 05e4fa98762eb3d469ab31dfe0432774, type: 2}
-  BarsPFB: {fileID: 1143692179459202, guid: e6ad011498ee529428d54c20c3d34ec3, type: 2}
-  StringsPFB: {fileID: 1854897379176256, guid: 16983f1c2d4e8174cb803dfee5eb135a, type: 2}
+  XCol: {r: 0.703, g: 0.3392359, b: 0.32109126, a: 0}
+  YCol: {r: 0.389, g: 0.547, b: 0.284, a: 0}
+  ZCol: {r: 0.331, g: 0.494, b: 0.653, a: 0}
   BarPrefab: {fileID: 114856007106370392, guid: 52d5e59d5914cb543b838cf851682011,
     type: 2}
   StringPrefab: {fileID: 114816877790789844, guid: bb0103207f5aa1c46bdbe0010e04340c,

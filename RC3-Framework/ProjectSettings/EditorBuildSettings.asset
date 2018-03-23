@@ -4,4 +4,7 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Practice/Scenes/05_Edge&Vertex&Noise.unity
+    guid: e8e8c405000a4b94fa547e0266c67e8c

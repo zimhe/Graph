@@ -88,6 +88,7 @@ public class TensileTriangle
         C = _positions[_c];
 
        GetCircumCenterUsingSpatialSlur();
+       setPlane();
     }
 
     void GetCircumCenterUsingSpatialSlur()
@@ -97,7 +98,7 @@ public class TensileTriangle
         Vec3d _c = new Vec3d(C.x, C.y, C.z);
 
         Vec3d _cc = GeometryUtil.GetCircumcenter(_a, _b, _c);
-
+        
 
         CC = new Vector3((float)_cc.X, (float)_cc.Y, (float)_cc.Z);
     }
@@ -145,6 +146,16 @@ public class TensileTriangle
         EdgeObjects.Add(_te);
     }
 
+    public IEnumerable<TensileEdge> GetConnectEdgesObjs()
+    {
+        return EdgeObjects;
+    }
+    public IEnumerable<TensileVertex> GetConnectVertexObjs()
+    {
+        return VertexObjects;
+    }
+
+
     public void addTensileVertexObjs(TensileVertex _tv)
     {
         VertexObjects.Add(_tv);
@@ -168,9 +179,43 @@ public class TensileTriangle
         return other;
     }
 
-    public Vector3 Circumcenter()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    private Vector3 _normal;
+
+
+    private Plane _plane=new Plane();
+
+
+
+    void calculateNormal()
+    {
+        _normal = Vector3.Cross(B - A, C - A);
+    }
+
+    void setPlane()
+    {
+        _plane.Set3Points(A,B,C);
+
+       
+    }
+
+
+    public  Vector3 Circumcenter()
     {
         return CC;
+    }
+
+    public Vector3 Normal()
+    {
+        return _plane.normal;
+    }
+
+    public Plane TriPlane()
+    {
+        return _plane;
     }
 
 

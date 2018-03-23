@@ -103,6 +103,8 @@ public class HexigonGrowthManager : MonoBehaviour
 
         GraphDone = GraphManager.GraphReady();
 
+        displayed = false;
+
         HexigonGrid = GraphManager._hexGrid();
         _graph = HexigonGrid.edgeGraph;
         Depth = new int[_graph.VertexCount];
@@ -147,6 +149,7 @@ public class HexigonGrowthManager : MonoBehaviour
         SourceCreated = false;
         _proQueue = new PriorityQueue<float, int>();
         S_Inx = 0;
+        displayed = false;
     }
 
 
@@ -274,7 +277,14 @@ public class HexigonGrowthManager : MonoBehaviour
                 {
                     if (tv.State != 0)
                     {
-                        tv.SetState(0);
+                       tv.SetAllState(0,0);
+                    }
+                }
+                foreach (var te in TenEdge)
+                {
+                    if (te.State != 0)
+                    {
+                        te.SetAllState(0,0);
                     }
                 }
 
@@ -410,21 +420,81 @@ public class HexigonGrowthManager : MonoBehaviour
         }
     }
 
+    bool displayed = false;
+
+
+    [SerializeField] Button  turnOnAllBtn;
     public void TurnOnAll()
     {
+
         if (GraphDone == true&&GrowSpread==false&&GrowDirect==false)
         {
-            foreach (var tv in TenVertex)
+            if (displayed == false)
             {
-                tv.SetAllState(2,1);
-            }
+                foreach (var tv in TenVertex)
+                {
+                    tv.SetAllState(2, 1);
+                }
 
-            foreach (var te in TenEdge)
+                foreach (var te in TenEdge)
+                {
+                    te.SetAllState(2, 1);
+                }
+                displayed = true;
+               turnOnAllBtn.GetComponent<ButtonImageHandler>().SetTexture(true);
+            }
+            else
             {
-                te.SetAllState(2,1);
+                foreach (var tv in TenVertex)
+                {
+                    tv.SetAllState(0, 0);
+                }
+
+                foreach (var te in TenEdge)
+                {
+                    te.SetAllState(0, 0);
+                }
+                displayed = false;
+                turnOnAllBtn.GetComponent<ButtonImageHandler>().SetTexture(false);
+
             }
         }
     }
+    public void TurnOnAllPre()
+    {
+        if (GraphDone == true && GrowSpread == false && GrowDirect == false)
+        {
+            if (displayed == false)
+            {
+                foreach (var tv in TenVertex)
+                {
+                    tv.SetAllState(2, 2);
+                }
+
+                foreach (var te in TenEdge)
+                {
+                    te.SetAllState(2, 2);
+                }
+                displayed = true;
+            }
+            else
+            {
+                foreach (var tv in TenVertex)
+                {
+                    tv.SetAllState(0, 0);
+                }
+
+                foreach (var te in TenEdge)
+                {
+                    te.SetAllState(0, 0);
+                }
+                displayed = false;
+            }
+        }
+    }
+
+
+
 
 
     IEnumerable<int> SourceRO()

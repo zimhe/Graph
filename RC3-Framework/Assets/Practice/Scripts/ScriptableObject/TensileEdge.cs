@@ -7,7 +7,24 @@ public class TensileEdge : MonoBehaviour {
 
     [SerializeField] private GameObject EdgeIndicatorPFB;
     [SerializeField] private GameObject ShapePFB;
-   
+
+    [SerializeField] private Color XCol;
+    [SerializeField] private Color YCol;
+    [SerializeField] private Color ZCol;
+
+    private Transform BarObjHolder;
+
+    private Transform StringObjHolder;
+
+    public void SetBarHolder(Transform bhd)
+    {
+        BarObjHolder = bhd;
+    }
+    public void SetStrHolder(Transform shd)
+    {
+        StringObjHolder = shd;
+    }
+
 
 
     [SerializeField] private StaticBar BarPrefab;
@@ -28,6 +45,9 @@ public class TensileEdge : MonoBehaviour {
     Vector3[] ToTriangle=new Vector3[2];
     Vector3[] ToLayer=new Vector3[2];
 
+    GameObject[] toVertexDot=new GameObject[2];
+    GameObject[] toTriangleDot = new GameObject[2];
+    GameObject[] toLayerDot = new GameObject[2];
 
     private List<Vector3[]> pointCloud = new List<Vector3[]>(6);
 
@@ -49,6 +69,8 @@ public class TensileEdge : MonoBehaviour {
 
     List<GameObject> ObjHolder=new List<GameObject>(30);
 
+
+
     private GameObject GraphHolder;
 
     public int State { get; set; }
@@ -65,7 +87,7 @@ public class TensileEdge : MonoBehaviour {
 
     private int Scale;
 
-    private float thickness = 0.02f;
+    private float thickness = 0.005f;
 
     private bool ShowGraph = true;
 
@@ -122,6 +144,16 @@ public class TensileEdge : MonoBehaviour {
             ShowGraph = true;
             GraphHolder.GetComponent<MeshRenderer>().enabled = true;
         }
+    }
+    public void GraphToggle(bool toggle)
+    {
+     
+        
+            ShowGraph = toggle;
+
+            GraphHolder.GetComponent<MeshRenderer>().enabled = toggle;
+        
+       
     }
 
 
@@ -193,7 +225,7 @@ public class TensileEdge : MonoBehaviour {
         float L = s * Dv.magnitude;
         float Lt0 = (ToVertex[0] - ToTriangle[0]).magnitude * s;
         float R0 = Mathf.Sqrt(Mathf.Pow(Lt0, 2f) - Mathf.Pow(L / 2f, 2f));
-        float Lt1 = (ToVertex[0] - ToTriangle[1]).magnitude * s;
+        float Lt1 = (ToVertex[1] - ToTriangle[1]).magnitude * s;
         float R1 = Mathf.Sqrt(Mathf.Pow(Lt1, 2f) - Mathf.Pow(L / 2f, 2f));
 
         var Dt = ToTriangle[1] - ToTriangle[0];
@@ -208,10 +240,32 @@ public class TensileEdge : MonoBehaviour {
         float t0 = Mathf.Abs((DL - R0) / DL);
         float t1 = Mathf.Abs((DL - R1) / DL);
 
-        BarEnds2[0] = Dt * t1 + ToTriangle[0] + Dv * s / 2;
-        BarEnds2[1] = -Dt * t0 + ToTriangle[1] + Dv * s / 2;
-        BarEnds3[0] = Dt * t1 + ToTriangle[0] - Dv * s / 2;
-        BarEnds3[1] = -Dt * t0 + ToTriangle[1] - Dv * s / 2;
+        var DvP = Vector3.ProjectOnPlane(Dv, Vector3.up);
+
+        var b20= Dt * t1 + ToTriangle[0] + Dv * s / 2;
+        var b21 = -Dt * t0 + ToTriangle[1] + Dv * s / 2;
+        var b30 = Dt * t1 + ToTriangle[0] - Dv * s / 2;
+        var b31 = -Dt * t0 + ToTriangle[1] - Dv * s / 2;
+
+        var p1 = ConnectedTriangles[1].TriPlane();
+        var p0 = ConnectedTriangles[0].TriPlane();
+
+
+
+
+
+
+
+        BarEnds2[0] = p1.ClosestPointOnPlane(b20);
+        BarEnds2[1] = p0.ClosestPointOnPlane(b21);
+        BarEnds3[0] = p1.ClosestPointOnPlane(b30);
+        BarEnds3[1] = p0.ClosestPointOnPlane(b31);
+
+
+        //BarEnds2[0] = Dt * t1 + ToTriangle[0] + Dv * s / 2;
+        //BarEnds2[1] = -Dt * t0 + ToTriangle[1] + Dv * s / 2;
+        //BarEnds3[0] = Dt * t1 + ToTriangle[0] - Dv * s / 2;
+        //BarEnds3[1] = -Dt * t0 + ToTriangle[1] - Dv * s / 2;
 
 
         var Db = DiagonalVertexObjs[0].transform.localPosition - DiagonalVertexObjs[1].transform.localPosition;
@@ -233,33 +287,30 @@ public class TensileEdge : MonoBehaviour {
 
     void SetBars()
     {
-        string edgeType = "Edge";
-        ToVertexBars[0] = Instantiate(BarPrefab, transform.parent);
+        string edgeType = "Edge:"+StartVertice+","+EndVertice;
+        ToVertexBars[0] = Instantiate(BarPrefab,BarObjHolder);
         ToVertexBars[0].SetupBar(BarEnds0[0],BarEnds0[1],thickness,0,edgeType);
 
 
-        ToVertexBars[1] = Instantiate(BarPrefab, transform.parent);
+        ToVertexBars[1] = Instantiate(BarPrefab, BarObjHolder);
         ToVertexBars[1].SetupBar(BarEnds1[0], BarEnds1[1], thickness, 1,edgeType);
 
-        ToTiangleBars[0] = Instantiate(BarPrefab, transform.parent);
-        ToTiangleBars[0].SetupBar(BarEnds2[0],BarEnds2[1],thickness,2,edgeType);
+        ToTiangleBars[0] = Instantiate(BarPrefab, BarObjHolder);
+        ToTiangleBars[0].SetupBar(BarEnds2[0],BarEnds2[1],thickness*1.3f,2,edgeType);
 
-        ToTiangleBars[1] = Instantiate(BarPrefab, transform.parent);
-        ToTiangleBars[1].SetupBar(BarEnds3[0], BarEnds3[1], thickness, 3,edgeType);
+        ToTiangleBars[1] = Instantiate(BarPrefab, BarObjHolder);
+        ToTiangleBars[1].SetupBar(BarEnds3[0], BarEnds3[1], thickness*1.3f, 3,edgeType);    
 
-        ToLayerBars[0] = Instantiate(BarPrefab, transform.parent);
+        ToLayerBars[0] = Instantiate(BarPrefab, BarObjHolder);
         ToLayerBars[0].SetupBar(BarEnds4[0],BarEnds4[1],thickness,4,edgeType);
 
-        ToLayerBars[1] = Instantiate(BarPrefab, transform.parent);
+        ToLayerBars[1] = Instantiate(BarPrefab, BarObjHolder);
         ToLayerBars[1].SetupBar(BarEnds5[0], BarEnds5[1], thickness, 5,edgeType);
 
         AllBars.AddRange(ToVertexBars);
         AllBars.AddRange(ToTiangleBars);
         AllBars.AddRange(ToLayerBars);
-        foreach (var tb in ToTiangleBars)
-        {
-            tb.GetComponent<MeshRenderer>().material.color=Color.red;
-        }
+        
 
     }
 
@@ -313,8 +364,8 @@ public class TensileEdge : MonoBehaviour {
                     _end1 = pointCloud[1][ToPoint];
                 }
 
-                StaticStrings str0 = Instantiate(StringPrefab, transform.parent);
-                StaticStrings str1 = Instantiate(StringPrefab, transform.parent);
+                StaticStrings str0 = Instantiate(StringPrefab, StringObjHolder);
+                StaticStrings str1 = Instantiate(StringPrefab, StringObjHolder);
                 str0.ConnectString(_start, _end0, thickness * 0.3f, index,"edge");
                 str1.ConnectString(_start, _end1, thickness * 0.3f, index+1,"edge");
                 strings.Add(str0);
@@ -474,6 +525,63 @@ public class TensileEdge : MonoBehaviour {
                     }
                 }
             }
+            if (SubState == 2)
+            {
+                clean();
+                if (ConnectedTriangles.Count == 2)
+                {
+                    int ti = 0;
+                    foreach (var p in ToTriangle)
+                    {
+                        var tt = Instantiate(ShapePFB,transform.parent);
+                        tt.transform.localPosition = p;
+                        tt.GetComponent<MeshRenderer>().material.color = XCol;
+                        toTriangleDot[ti] = tt;
+                        ti++;
+                    }
+                    int vi = 0;
+                    foreach (var p in ToVertex)
+                    {
+                     
+                        var tv = Instantiate(ShapePFB,transform.parent);
+                        tv.transform.localPosition = p;
+                        tv.GetComponent<MeshRenderer>().material.color = YCol;
+                        toVertexDot[vi] = tv;
+                        vi++;
+                    }
+                    int li = 0;
+                    foreach (var p in ToLayer)
+                    {
+                        var tl = Instantiate(ShapePFB,transform.parent);
+                        tl.transform.localPosition = p;
+                        tl.GetComponent<MeshRenderer>().material.color = ZCol;
+                        toLayerDot[li] = tl;
+                        li++;
+                    }
+
+                    ObjHolder.AddRange(toTriangleDot);
+                    ObjHolder.AddRange(toVertexDot);
+                    ObjHolder.AddRange(toLayerDot);
+                    SetBars();
+                    foreach (var tt in ToTiangleBars)
+                    {
+                        tt.GetComponent<MeshRenderer>().material.color = XCol;
+                    }
+                    foreach (var tv in ToVertexBars)
+                    {
+                        tv.GetComponent<MeshRenderer>().material.color = YCol;
+                    }
+                    foreach (var tl in ToLayerBars)
+                    {
+                        tl.GetComponent<MeshRenderer>().material.color = ZCol;
+                    }
+
+                    foreach (var b in AllBars)
+                    {
+                        ObjHolder.Add(b.gameObject);
+                    }
+                }
+            }
         }
     }
 
@@ -512,6 +620,15 @@ public class TensileEdge : MonoBehaviour {
         {
             ObjHolder[1].transform.localPosition = Vector3.forward * 0.5f * GraphHolder.transform.localScale.y;
             ObjHolder[2].transform.localPosition = Vector3.back * 0.5f * GraphHolder.transform.localScale.y;
+        }
+        if (State == 2 && SubState == 2&&ConnectedTriangles.Count==2)
+        {
+            toTriangleDot[0].transform.localPosition = ToTriangle[0];
+            toTriangleDot[1].transform.localPosition = ToTriangle[1];
+            toVertexDot[0].transform.localPosition = ToVertex[0];
+            toVertexDot[1].transform.localPosition = ToVertex[1];
+            toLayerDot[0].transform.localPosition = ToLayer[0];
+            toLayerDot[1].transform.localPosition = ToLayer[1];
         }
     }
 

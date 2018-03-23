@@ -10,8 +10,21 @@ public class TensileVertex : MonoBehaviour
 {
     [SerializeField] private GameObject VertexIndicatorPFB;
     [SerializeField] private GameObject ShapePFB;
-  
 
+    [SerializeField] private Color col;
+
+    private Transform BarObjHolder;
+
+    private Transform StringObjHolder;
+
+    public void SetBarHolder(Transform bhd)
+    {
+        BarObjHolder = bhd;
+    }
+    public void SetStrHolder(Transform shd)
+    {
+        StringObjHolder = shd;
+    }
 
     List<Vector3> Positions = new List<Vector3>(6);
     private Vector3[] bar0pos = new Vector3[2];
@@ -51,7 +64,7 @@ public class TensileVertex : MonoBehaviour
     [SerializeField] private StaticStrings stringPrefab;
 
     StaticBar [] allBars=new StaticBar[6];
-    private float thickness = 0.02f;
+    private float thickness = 0.005f;
 
     List<TensileEdge> connectedEdgeObjs=new List<TensileEdge>(6);
 
@@ -91,33 +104,38 @@ public class TensileVertex : MonoBehaviour
             GraphHolder.GetComponent<MeshRenderer>().enabled = true;
         }
     }
+    public void GraphToggle(bool toggle)
+    {
+            ShowGraph = toggle;
+            GraphHolder.GetComponent<MeshRenderer>().enabled = toggle;
+    }
 
     private string VertexType = "vertex";
     void ContstructBar()
     {
         if (connectedVertInLayerDefOrder.Count == 6)
         {
-            StaticBar b0 = Instantiate(barPrefab, transform.parent);
+            StaticBar b0 = Instantiate(barPrefab, BarObjHolder);
             b0.SetupBar(bar0pos[0], bar0pos[1], thickness, 0,VertexType);
             allBars[0] = b0;
 
-            StaticBar b1 = Instantiate(barPrefab, transform.parent);
+            StaticBar b1 = Instantiate(barPrefab, BarObjHolder);
             b1.SetupBar(bar1pos[0], bar1pos[1], thickness, 1,VertexType);
             allBars[1] = b1;
 
-            StaticBar b2 = Instantiate(barPrefab, transform.parent);
+            StaticBar b2 = Instantiate(barPrefab, BarObjHolder);
             b2.SetupBar(bar2pos[0], bar2pos[1], thickness, 2,VertexType);
             allBars[2] = b2;
 
-            StaticBar b3 = Instantiate(barPrefab, transform.parent);
+            StaticBar b3 = Instantiate(barPrefab, BarObjHolder);
             b3.SetupBar(bar3pos[0], bar3pos[1], thickness, 3,VertexType);
             allBars[3] = b3;
 
-            StaticBar b4 = Instantiate(barPrefab, transform.parent);
+            StaticBar b4 = Instantiate(barPrefab, BarObjHolder);
             b4.SetupBar(bar4pos[0], bar4pos[1], thickness, 4,VertexType);
             allBars[4] = b4;
 
-            StaticBar b5 = Instantiate(barPrefab, transform.parent);
+            StaticBar b5 = Instantiate(barPrefab, BarObjHolder);
             b5.SetupBar(bar5pos[0], bar5pos[1], thickness, 5,VertexType);
             allBars[5] = b5;
         }
@@ -297,10 +315,10 @@ public class TensileVertex : MonoBehaviour
                 fromStart = i + 1;
             }
 
-            StaticStrings s0 = Instantiate(stringPrefab, transform.parent);
-            StaticStrings s1 = Instantiate(stringPrefab, transform.parent);
-            StaticStrings s2 = Instantiate(stringPrefab, transform.parent);
-            StaticStrings s3 = Instantiate(stringPrefab, transform.parent);
+            StaticStrings s0 = Instantiate(stringPrefab, StringObjHolder);
+            StaticStrings s1 = Instantiate(stringPrefab,StringObjHolder);
+            StaticStrings s2 = Instantiate(stringPrefab, StringObjHolder);
+            StaticStrings s3 = Instantiate(stringPrefab, StringObjHolder);
 
             s0.ConnectString(stringPos[i][1],stringPos[fromStart][0],thickness*0.3f,i*4,VertexType);
             s1.ConnectString(stringPos[i][1], stringPos[fromStart][1], thickness * 0.3f, i * 4+1,VertexType);
@@ -477,7 +495,8 @@ public class TensileVertex : MonoBehaviour
            clean();
 
             GameObject vObj = Instantiate(ShapePFB, transform);
-            vObj.GetComponent<MeshRenderer>().material.color = Color.black;
+
+            vObj.transform.localScale *= 1.5f;
             ObjHolder.Add(vObj);
         }
 
@@ -488,7 +507,7 @@ public class TensileVertex : MonoBehaviour
                 clean();
               
                 GameObject vObj = Instantiate(ShapePFB, transform);
-                vObj.GetComponent<MeshRenderer>().material.color = Color.black;
+              
                 ObjHolder.Add(vObj);
             }
 
@@ -500,7 +519,20 @@ public class TensileVertex : MonoBehaviour
                     ContstructBar();
                     setString();
                 }
-          
+            }
+            if (SubState == 2)//Show all structure
+            {
+                clean();
+                if (connectedVertexsInCounterClockwise.Count == 6)
+                {
+                    ContstructBar();
+                    foreach (var b in allBars)
+                    {
+                        b.GetComponent<MeshRenderer>().material.color = col;
+                    }
+
+                }
+
             }
         }
     }

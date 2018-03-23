@@ -13,9 +13,9 @@ public class HexigonGraphManager : MonoBehaviour
     [SerializeField] private SharedEdgeGraph _edgeGraph;
     [SerializeField] private TensileVertex TGVertexPrefab;
     [SerializeField] private TensileEdge TGEdgePrefab;
-    [SerializeField] private int countX = 5;
-    [SerializeField] private int countZ = 5;
-    [SerializeField] private int countY = 5;
+    private int countX = 5;
+    private int countZ = 5;
+    private int countY = 3;
     [SerializeField] private int Scale = 1;
     [SerializeField] int DefState;
 
@@ -23,6 +23,9 @@ public class HexigonGraphManager : MonoBehaviour
     [SerializeField] private Button btn2;
 
     private TensileEdge[,] EdgeObj2d;
+
+    private Transform BarsHolder;
+    private Transform StringHolder;
 
     List<TensileEdge> verticalEdges=new List<TensileEdge>();
 
@@ -59,6 +62,87 @@ public class HexigonGraphManager : MonoBehaviour
     private int sizeHolderY = 3;
     private int sizeHolderZ = 5;
 
+
+    void PresentationMode(int _x, int _z, int _y)
+    {
+        SetXSize(_x.ToString());
+        SetYSize(_y.ToString());
+        SetZSize(_z.ToString());
+        initializeGraph();
+    }
+
+    public void OneUnit()
+    {
+        PresentationMode(2,2,1);
+    }
+
+    public void ThreeLayer()
+    {
+        PresentationMode(2, 2, 3);
+    }
+
+    public void OneLayer()
+    {
+        PresentationMode(6, 6, 1);
+    }
+
+
+    public void HexagonGroup()
+    {
+        PresentationMode(3, 3, 1);
+        
+        _edgeGraph.TensileVertexObjects[0].GraphToggle(false);
+        _edgeGraph.TensileVertexObjects[6].GraphToggle(false);
+
+
+        List<TensileEdge> tempEdge=new List<TensileEdge>();
+        foreach (var te in _edgeGraph.TensileEdgeObjects)
+        {
+           tempEdge.Add(te);
+        }
+
+        foreach (var te in _edgeGraph.TensileVertexObjects[0].GetConnectedEdgeObjs())
+        {
+            te.GraphToggle(false);
+
+            var t = te.GetConnecetedTriangles();
+            foreach (var tt in t)
+            {
+                foreach (var ee in tt.GetConnectEdgesObjs())
+                {
+                    tempEdge.Remove(ee);
+
+                }
+                break;
+            }
+        }
+        foreach (var te in _edgeGraph.TensileVertexObjects[6].GetConnectedEdgeObjs())
+        {
+            te.GraphToggle(false);
+            var t = te.GetConnecetedTriangles();
+            foreach (var tt in t)
+            {
+                foreach (var ee in tt.GetConnectEdgesObjs())
+                {
+                    tempEdge.Remove(ee);
+                }
+                break;
+            }
+        }
+
+
+
+        foreach (var te in tempEdge)
+        {
+            te.SetAllState(2,2);
+        }
+        foreach (var tv in _edgeGraph.TensileVertexObjects)
+        {
+            tv.SetAllState(2,2);
+        }
+        
+    }
+
     public void SetXSize(string _x)
     {
 
@@ -78,7 +162,7 @@ public class HexigonGraphManager : MonoBehaviour
 
         int.TryParse(_y, out IntY);
 
-        print(IntY);
+
 
         if (IntY != 0)
         {
@@ -107,30 +191,53 @@ public class HexigonGraphManager : MonoBehaviour
         countZ = sizeHolderZ;
     }
 
+
+    private bool displayGraph = true;
     public void GraphToggleAll()
     {
+        if (displayGraph == false)
+        {
+            displayGraph = true;
+        }
+        else
+        {
+            displayGraph = false;
+        }
+
         foreach (var tv in _edgeGraph.TensileVertexObjects)
         {
-            tv.GraphToggle();
+            tv.GraphToggle(displayGraph);
         }
 
         foreach (var te in _edgeGraph.TensileEdgeObjects)
         {
-            te.GraphToggle();
+            te.GraphToggle(displayGraph);
         }
 
         foreach (var ve in verticalEdges)
         {
-            ve.GraphToggle();
+            ve.GraphToggle(displayGraph);
         }
     }
 
 
     private void Awake()
     {
-        //initializeGraph();
-        btn.interactable = false;
-        btn2.interactable = false;
+        BarsHolder=new GameObject( ).transform;
+        BarsHolder.parent = transform;
+
+        BarsHolder.name = "Bars";
+
+        StringHolder = new GameObject().transform;
+
+        StringHolder.parent = transform;
+        StringHolder.name = "Strings";
+
+        initializeGraph();
+
+
+        //btn.interactable = false;
+       // btn2.interactable = false;
     }
 
     public bool GraphReady()
@@ -162,12 +269,18 @@ public class HexigonGraphManager : MonoBehaviour
 
             getNoise();
 
-            transform.position = new Vector3(-countX * 0.5f, 0f, -countZ * 0.5f);
+            transform.position = new Vector3(-countX * 0.5f, -countY * 0.5f, -countZ * 0.5f);
             awake = true;
 
             GetComponent<HexigonGrowthManager>().initializeGrowther();
             btn.interactable = true;
             btn2.interactable = true;
+        }
+        else
+        {
+            ResetGraph();
+
+            initializeGraph();
         }
    
     }
@@ -326,7 +439,10 @@ public class HexigonGraphManager : MonoBehaviour
         foreach (var p in currentPositions)
         {
             var tObj = Instantiate(TGVertexPrefab, transform);
+            tObj.SetBarHolder(BarsHolder);
+            tObj.SetStrHolder(StringHolder);
             tObj.transform.localPosition = p;
+
             tObj.SetupStructure(Scale, DefState, index);
             Obj.Add(tObj);
             index++;
@@ -355,6 +471,9 @@ public class HexigonGraphManager : MonoBehaviour
             if (E!=V)
             {
                 var eObj = Instantiate(TGEdgePrefab, transform);
+
+                eObj.SetBarHolder(BarsHolder);
+                eObj.SetStrHolder(StringHolder);
                 eObj.SetupStructure(Scale, DefState, S, E, currentPositions);
                 EObj.Add(eObj);
                EdgeObj2d[S, E] = eObj;
@@ -362,6 +481,8 @@ public class HexigonGraphManager : MonoBehaviour
             else
             {
                 var eObj = Instantiate(TGEdgePrefab, transform);
+                eObj.SetBarHolder(BarsHolder);
+                eObj.SetStrHolder(StringHolder);
                 eObj.SetupStructure(Scale, DefState, S, E, currentPositions);
                 verticalEdges.Add(eObj);
             }
@@ -620,6 +741,8 @@ public class HexigonGraphManager : MonoBehaviour
                 ve.SetState(0);
                 DestroyImmediate(ve.gameObject);
             }
+
+
             _edgeGraph.TensileVertexObjects.Clear();
             _edgeGraph.TensileEdgeObjects.Clear();
             _edgeGraph.TensileTriangle.Clear();

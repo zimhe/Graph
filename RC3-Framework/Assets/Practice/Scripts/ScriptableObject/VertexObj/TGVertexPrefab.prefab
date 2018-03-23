@@ -54,6 +54,7 @@ MonoBehaviour:
   VertexIndicatorPFB: {fileID: 1551340229235226, guid: 09cd5f951bbf9d541b63651332f2b7dc,
     type: 2}
   ShapePFB: {fileID: 1673083690172570, guid: 1f5222c00984e824d9cc2ae7637e76c8, type: 2}
+  col: {r: 0.389, g: 0.547, b: 0.284, a: 0}
   barPrefab: {fileID: 114856007106370392, guid: 52d5e59d5914cb543b838cf851682011,
     type: 2}
   stringPrefab: {fileID: 114816877790789844, guid: bb0103207f5aa1c46bdbe0010e04340c,
