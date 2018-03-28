@@ -205,3 +205,4 @@ cbda5ad500e671626d2a8bbcf16be083 Assembly-CSharp.dll:UnityEngine.Recorder.InputB
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:RC3.Unity.SharedSelection
 6fd3ae9ce07d08dfa062bed5b259ba44 Assembly-CSharp.dll:UTJ.FrameCapturer.Recorders.MP4RecorderSettings
 89680ad1e5201e14cdd7b69569f14874 Assembly-CSharp.dll:.OBJExporter
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.ApplicationControl
