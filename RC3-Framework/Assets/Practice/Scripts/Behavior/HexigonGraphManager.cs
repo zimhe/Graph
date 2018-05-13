@@ -490,6 +490,11 @@ public class HexigonGraphManager : MonoBehaviour
         return EObj;
     }
 
+    void addGraph()
+    {
+
+    }
+
     IEnumerable<TensileTriangle> CreateTriangle()
     {
         List<TensileTriangle> T = new List<TensileTriangle>();
@@ -757,7 +762,4 @@ public class HexigonGraphManager : MonoBehaviour
 
         awake = false;
     }
-
-
-
 }

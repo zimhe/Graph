@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2017
+# Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RC3-Framework", "RC3-Framework.csproj", "{7CA0D2FF-D666-E484-4F72-C85E0D0989AC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RC3-Framework.Editor", "RC3-Framework.Editor.csproj", "{ABCF6235-EA1D-9ABB-495C-CAC8F74F35BD}"

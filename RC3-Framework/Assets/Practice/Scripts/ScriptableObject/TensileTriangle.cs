@@ -143,6 +143,7 @@ public class TensileTriangle
 
     public void addTensileEdgeObjs(TensileEdge _te)
     {
+        if(!EdgeObjects.Contains(_te))
         EdgeObjects.Add(_te);
     }
 
@@ -158,6 +159,7 @@ public class TensileTriangle
 
     public void addTensileVertexObjs(TensileVertex _tv)
     {
+        if(!VertexObjects.Contains(_tv))
         VertexObjects.Add(_tv);
     }
 

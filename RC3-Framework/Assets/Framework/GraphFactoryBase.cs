@@ -153,6 +153,57 @@ namespace RC3
 
             return g;
         }
+        /// <summary>
+        /// Create a grid in a boundry of a triangle
+        /// </summary>
+        /// <param name="SegmentCount"></param>
+        /// <param name="LayerCount"></param>
+        /// <returns></returns>
+        public G CreateDecreasingTriangleGrid(int SegmentCount,  int LayerCount)
+        {
+            var g = Create();
+
+            int VertextIndex = 0;
+
+            for (int y = 0; y < LayerCount; y++)
+            {
+                for (int z = 0; z < SegmentCount; z++)
+                {
+                    for (int x = 0; x < SegmentCount - z; x++)
+                    {
+                       
+                        g.AddVertex();
+                      
+                    }
+                }
+            }
+            for (int y = 0; y < LayerCount; y++)
+            {
+                for (int z = 0; z < SegmentCount; z++)
+                {
+                    for (int x = 0; x < SegmentCount - z; x++)
+                    {
+                        VertextIndex++;
+                      
+                        var layerVertexCount = y * ((SegmentCount * SegmentCount - SegmentCount) / 2 + SegmentCount);
+
+                      
+                        var row = SegmentCount - z + 1;
+
+                        int i = VertextIndex - 1;
+
+                        if (x > 0) g.AddEdge(i, i - 1); // x-1
+                        if (z > 0) g.AddEdge(i, i - row); // z-1
+                        if (z > 0 && x < SegmentCount - 1) g.AddEdge(i, i - row + 1); // z-1, x+1
+                        if (y > 0) g.AddEdge(i, i - layerVertexCount);//y-1
+
+                    }
+                }
+            }
+
+
+            return g;
+        }
 
         /// <summary>
         /// 
