@@ -1,4 +1,4 @@
-OSXStandalone
+iOS
 SceneListBegin?
 Assets/Practice/Scenes/05_Edge&Vertex&Noise.unity
 SceneListEnd?
@@ -157,6 +157,7 @@ b459dffee2f2ec536857a008e5de94ca Assembly-CSharp.dll:UnityEngine.Recorder.Input.
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.CubicGrowthManager
 427b18165f08d3ac6980ecd12083b33d Assembly-CSharp.dll:UTJ.FrameCapturer.Recorders.GIFRecorder
 78329d00ca36aa3ca1c96dab8a338718 Assembly-CSharp.dll:RC3.Unity.Examples.DendriticGrowth.DirectedGrowthManager
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.ApplicationControl
 54a2471a727cd3da2628d109b2b65d61 Assembly-CSharp.dll:UnityEngine.Recorder.InputSettingsComponent
 fc1e0f4d8439d9928083474691511a13 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkAnimator
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Networking.dll:UnityEngine.Networking.NetworkBehaviour

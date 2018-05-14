@@ -14,6 +14,7 @@
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <TargetFrameworkProfile></TargetFrameworkProfile>
     <CompilerResponseFile></CompilerResponseFile>
+    <UnityProjectGenerator>VSTU</UnityProjectGenerator>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>2017.3.1f1</UnityVersion>
@@ -398,18 +399,23 @@
     <Compile Include="Assets\Practice\Scripts\Behavior\DeformedGraphManager.cs" />
     <Compile Include="Assets\Practice\Scripts\Behavior\DirectedGrowthManager.cs" />
     <Compile Include="Assets\Practice\Scripts\Behavior\GraphManager.cs" />
+    <Compile Include="Assets\Practice\Scripts\Behavior\HexigonDirectedGraphManager.cs" />
     <Compile Include="Assets\Practice\Scripts\Behavior\HexigonGraphManager.cs" />
     <Compile Include="Assets\Practice\Scripts\Behavior\HexigonGrowthManager.cs" />
     <Compile Include="Assets\Practice\Scripts\Behavior\ShiftedCubicGrowthManager.cs" />
     <Compile Include="Assets\Practice\Scripts\Behavior\ShiftedGraphManager.cs" />
     <Compile Include="Assets\Practice\Scripts\Behavior\Test.cs" />
-    <Compile Include="Assets\Practice\Scripts\Object\ButtonImageHandler.cs" />
+    <Compile Include="Assets\Practice\Scripts\Behavior\TestTriangeGrid.cs" />
+    <Compile Include="Assets\Practice\Scripts\Behavior\TriangleBoundryGraphManager.cs" />
+    <Compile Include="Assets\Practice\Scripts\Behavior\TriangleBoundryGrowthManager.cs" />
     <Compile Include="Assets\Practice\Scripts\Object\TensegrityObject.cs" />
     <Compile Include="Assets\Practice\Scripts\ScriptableObject\Components\StaticBar.cs" />
     <Compile Include="Assets\Practice\Scripts\ScriptableObject\Components\StaticStrings.cs" />
     <Compile Include="Assets\Practice\Scripts\ScriptableObject\TensileEdge.cs" />
     <Compile Include="Assets\Practice\Scripts\ScriptableObject\TensileTriangle.cs" />
     <Compile Include="Assets\Practice\Scripts\ScriptableObject\TensileVertex.cs" />
+    <Compile Include="Assets\Practice\Scripts\UiControl\ApplicationControl.cs" />
+    <Compile Include="Assets\Practice\Scripts\UiControl\ButtonImageHandler.cs" />
     <Compile Include="Assets\Practice\Scripts\UiControl\InputSwitcher.cs" />
     <Compile Include="Assets\Practice\Scripts\UiControl\ToolTips.cs" />
     <Compile Include="Assets\Unity Technologies\Recorder\Extensions\FCIntegration\BaseFCRecorderSettings.cs" />

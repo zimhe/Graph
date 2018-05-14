@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class TensileEdge : MonoBehaviour {
@@ -25,6 +26,15 @@ public class TensileEdge : MonoBehaviour {
         StringObjHolder = shd;
     }
 
+    public int StringCount()
+    {
+        return strings.Count;
+    }
+
+    public int BarCount()
+    {
+        return AllBars.Count;
+    }
 
 
     [SerializeField] private StaticBar BarPrefab;
@@ -85,7 +95,66 @@ public class TensileEdge : MonoBehaviour {
  
     public int Depth { get; set; }
 
-    private int Scale;
+    public TensileVertex NeighborVertexStart { get; set; }
+    public TensileVertex NeighborVertexEnd { get; set; }
+    public TensileEdge NeighborEdgeAbove { get; set; }
+    public TensileEdge NeighborEdgeBelow { get; set; }
+
+
+    private List <Vector3> PositionToGrow=new List<Vector3>(2);
+
+    public void AddPositionToGrow(Vector3 _p)
+    {
+       PositionToGrow.Add(_p);
+    }
+
+    public List<Vector3> GetPositionToGrow()
+    {
+        return PositionToGrow;
+    }
+
+
+
+    public Vector3 PosToGrow(int index)
+    {
+        Vector3 ptg = PositionToGrow[index];
+        PositionToGrow.Remove(PositionToGrow[index]);
+
+        Destroy(ToGrowIndicators[index]);
+
+        ToGrowIndicators.Remove(ToGrowIndicators[index]);
+
+
+        return ptg;
+    }
+
+    private List<GameObject> ToGrowIndicators = new List<GameObject>(2);
+
+    public void addIndicator(GameObject _indicator)
+    {
+        ToGrowIndicators.Add(_indicator);
+    }
+
+    public List<GameObject> GetIndicators()
+    {
+        return ToGrowIndicators;
+    }
+
+    public void ToggleIndicators(bool _toggle)
+    {
+        foreach (var ind in ToGrowIndicators)
+        {
+            ind.GetComponent<MeshRenderer>().enabled = _toggle;
+        }
+    }
+
+    public GameObject GetGraphHolder()
+    {
+        return GraphHolder;
+    }
+
+
+    private float Scale;
 
     private float thickness = 0.005f;
 
@@ -93,13 +162,7 @@ public class TensileEdge : MonoBehaviour {
 
     void Start()
     {
-        //setPoint();
-
-
-
         setPoint();
-        //SetBars();
-        //setString();
 
     }
 
@@ -178,6 +241,22 @@ public class TensileEdge : MonoBehaviour {
         }
     }
 
+
+    private float DefThickness = 0.005f;
+    private float SelectedThickness = 0.02f;
+    private float GraphThickness = 0.005f;
+
+    public void GraphSelect()
+    {
+        GraphThickness = SelectedThickness;
+    }
+
+    public void resetGraphThickness()
+    {
+        GraphThickness = DefThickness;
+
+    }
+
     void updateTransform()
     {
         if (ConnectedVertexObjs.Count != 0)
@@ -192,7 +271,7 @@ public class TensileEdge : MonoBehaviour {
 
             var up = Vector3.Cross(D, Vector3.down);
             transform.localRotation = Quaternion.LookRotation(D, up);
-            GraphHolder.transform.localScale = new Vector3(0.005f, 0.5f * D.magnitude, 0.005f);
+            GraphHolder.transform.localScale = new Vector3(GraphThickness, 0.5f * D.magnitude, GraphThickness);
         }
     }
 
@@ -220,6 +299,7 @@ public class TensileEdge : MonoBehaviour {
         BarEnds0[1] = (ToVertex[0] - ToVertex[1]) * 0.72f + ToVertex[1] + Vector3.up * 0.132f * Scale;
         BarEnds1[0] = (ToVertex[1] - ToVertex[0]) * 0.72f + ToVertex[0] + Vector3.down * 0.132f * Scale;
         BarEnds1[1] = (ToVertex[0] - ToVertex[1]) * 0.72f + ToVertex[1] + Vector3.down * 0.132f * Scale;
+
 
         float s = 0.2623f;
         float L = s * Dv.magnitude;
@@ -251,11 +331,6 @@ public class TensileEdge : MonoBehaviour {
         var p0 = ConnectedTriangles[0].TriPlane();
 
 
-
-
-
-
-
         BarEnds2[0] = p1.ClosestPointOnPlane(b20);
         BarEnds2[1] = p0.ClosestPointOnPlane(b21);
         BarEnds3[0] = p1.ClosestPointOnPlane(b30);
@@ -271,10 +346,10 @@ public class TensileEdge : MonoBehaviour {
         var Db = DiagonalVertexObjs[0].transform.localPosition - DiagonalVertexObjs[1].transform.localPosition;
         var Da = DiagonalVertexObjs[0].VertAbovePosition() - DiagonalVertexObjs[1].VertAbovePosition();
 
-        BarEnds4[0] = Db * 0.6f + DiagonalVertexObjs[1].transform.localPosition + (0.42552f / 2f) * Scale * Vector3.down;
-        BarEnds4[1] = Da * 0.6f + DiagonalVertexObjs[1].VertAbovePosition() + (0.42552f / 2f) * Scale * Vector3.down;
-        BarEnds5[0] = -Db * 0.6f + DiagonalVertexObjs[0].transform.localPosition + (0.42552f / 2f) * Scale * Vector3.down;
-        BarEnds5[1] = -Da * 0.6f + DiagonalVertexObjs[0].VertAbovePosition() + (0.42552f / 2f) * Scale * Vector3.down;
+        BarEnds4[0] = Db * 0.57f + DiagonalVertexObjs[1].transform.localPosition + (0.42552f / 2f) * Scale * Vector3.down;
+        BarEnds4[1] = Da * 0.57f + DiagonalVertexObjs[1].VertAbovePosition() + (0.42552f / 2f) * Scale * Vector3.down;
+        BarEnds5[0] = -Db * 0.57f + DiagonalVertexObjs[0].transform.localPosition + (0.42552f / 2f) * Scale * Vector3.down;
+        BarEnds5[1] = -Da * 0.57f + DiagonalVertexObjs[0].VertAbovePosition() + (0.42552f / 2f) * Scale * Vector3.down;
 
         pointCloud[0] = BarEnds2;
         pointCloud[1] = BarEnds3;
@@ -327,99 +402,107 @@ public class TensileEdge : MonoBehaviour {
 
     void setString()
     {
-        int index = 0;
-        for (int i = 0; i < 6; i++)
+        if (pointCloud.Count != 0)
         {
-            for (int j = 0; j < 2; j++)
+            int index = 0;
+            for (int i = 0; i < 6; i++)
             {
-                int ToPoint;
-                int ToIndex0;
-                int ToIndex1;
+                for (int j = 0; j < 2; j++)
+                {
+                    int ToPoint;
+                    int ToIndex0;
+                    int ToIndex1;
 
-                Vector3 _start;
-                Vector3 _end0;
-                Vector3 _end1;
+                    Vector3 _start;
+                    Vector3 _end0;
+                    Vector3 _end1;
 
-                if (i % 2 == 0)
-                {
-                    ToPoint = 0;
-                    ToIndex0 = 2;
-                    ToIndex1 = 3;
-                }
-                else
-                {
-                    ToPoint = 1;
-                    ToIndex0 = 1;
-                    ToIndex1 = 2;
-                }
-                _start = pointCloud[i][j];
-                if (i < 4)
-                {
-                    _end0 = pointCloud[i + ToIndex0][ToPoint];
-                    _end1 = pointCloud[i + ToIndex1][ToPoint];
-                }
-                else
-                {
-                    _end0 = pointCloud[0][ToPoint];
-                    _end1 = pointCloud[1][ToPoint];
-                }
+                    if (i % 2 == 0)
+                    {
+                        ToPoint = 0;
+                        ToIndex0 = 2;
+                        ToIndex1 = 3;
+                    }
+                    else
+                    {
+                        ToPoint = 1;
+                        ToIndex0 = 1;
+                        ToIndex1 = 2;
+                    }
+                    _start = pointCloud[i][j];
+                    if (i < 4)
+                    {
+                        _end0 = pointCloud[i + ToIndex0][ToPoint];
+                        _end1 = pointCloud[i + ToIndex1][ToPoint];
+                    }
+                    else
+                    {
+                        _end0 = pointCloud[0][ToPoint];
+                        _end1 = pointCloud[1][ToPoint];
+                    }
 
-                StaticStrings str0 = Instantiate(StringPrefab, StringObjHolder);
-                StaticStrings str1 = Instantiate(StringPrefab, StringObjHolder);
-                str0.ConnectString(_start, _end0, thickness * 0.3f, index,"edge");
-                str1.ConnectString(_start, _end1, thickness * 0.3f, index+1,"edge");
-                strings.Add(str0);
-                strings.Add(str1);
-                index += 2;
+                    StaticStrings str0 = Instantiate(StringPrefab, StringObjHolder);
+                    StaticStrings str1 = Instantiate(StringPrefab, StringObjHolder);
+                    str0.ConnectString(_start, _end0, thickness * 0.3f, index, "edge");
+                    str1.ConnectString(_start, _end1, thickness * 0.3f, index + 1, "edge");
+                    strings.Add(str0);
+                    strings.Add(str1);
+                    index += 2;
+                }
             }
         }
+       
     }
 
     void updateStrings()
     {
-        int index = 0;
-        for (int i = 0; i < 6; i++)
+        if (pointCloud.Count != 0)
         {
-            for (int j = 0; j < 2; j++)
+            int index = 0;
+            for (int i = 0; i < 6; i++)
             {
-                int ToPoint;
-                int ToIndex0;
-                int ToIndex1;
-
-                Vector3 _start;
-                Vector3 _end0;
-                Vector3 _end1;
-
-                if (i % 2 == 0)
+                for (int j = 0; j < 2; j++)
                 {
-                    ToPoint = 0;
-                    ToIndex0 = 2;
-                    ToIndex1 = 3;
-                }
-                else
-                {
-                    ToPoint = 1;
-                    ToIndex0 = 1;
-                    ToIndex1 = 2;
-                }
-                _start = pointCloud[i][j];
-                if (i < 4)
-                {
-                    _end0 = pointCloud[i + ToIndex0][ToPoint];
-                    _end1 = pointCloud[i + ToIndex1][ToPoint];
-                }
-                else
-                {
-                    _end0 = pointCloud[0][ToPoint];
-                    _end1 = pointCloud[1][ToPoint];
-                }
+                    int ToPoint;
+                    int ToIndex0;
+                    int ToIndex1;
 
-                strings[index].updateString(_start,_end0);
-                strings[index+1].updateString(_start, _end1);
+                    Vector3 _start;
+                    Vector3 _end0;
+                    Vector3 _end1;
 
-                index += 2;
+                    if (i % 2 == 0)
+                    {
+                        ToPoint = 0;
+                        ToIndex0 = 2;
+                        ToIndex1 = 3;
+                    }
+                    else
+                    {
+                        ToPoint = 1;
+                        ToIndex0 = 1;
+                        ToIndex1 = 2;
+                    }
+                    _start = pointCloud[i][j];
+                    if (i < 4)
+                    {
+                        _end0 = pointCloud[i + ToIndex0][ToPoint];
+                        _end1 = pointCloud[i + ToIndex1][ToPoint];
+                    }
+                    else
+                    {
+                        _end0 = pointCloud[0][ToPoint];
+                        _end1 = pointCloud[1][ToPoint];
+                    }
+
+                    strings[index].updateString(_start, _end0);
+                    strings[index + 1].updateString(_start, _end1);
+
+                    index += 2;
+                }
             }
         }
+          
     }
 
 
@@ -437,15 +520,18 @@ public class TensileEdge : MonoBehaviour {
 
     public void AddConnectedVertex(TensileVertex V)
     {
+        if(!ConnectedVertexObjs.Contains(V))
         ConnectedVertexObjs.Add(V);
     }
 
     public void AddDiagonalVertex(TensileVertex V)
     {
+        if(!DiagonalVertexObjs.Contains(V))
         DiagonalVertexObjs.Add(V);
     }
     public void AddTriangle(TensileTriangle _tt)
     {
+        if(!ConnectedTriangles.Contains(_tt))
         ConnectedTriangles.Add(_tt);
     }
 
@@ -459,7 +545,7 @@ public class TensileEdge : MonoBehaviour {
         return ConnectedTriangles;
     }
 
-    public void SetupStructure(int _scale, int _state, int _start,int _end, IEnumerable<Vector3> _position)
+    public void SetupStructure(float _scale, int _state, int _start,int _end, IEnumerable<Vector3> _position)
     {
         var p = _position.ToArray();
         Scale = _scale;

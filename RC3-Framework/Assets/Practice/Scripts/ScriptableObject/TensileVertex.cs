@@ -48,7 +48,7 @@ public class TensileVertex : MonoBehaviour
 
     public int Depth { get; set; }
 
-    private int Scale;
+    private float Scale;
 
     private int Age;
 
@@ -83,11 +83,16 @@ public class TensileVertex : MonoBehaviour
 
     public void EnableVertex()
     {
-        reoderConnectedVertex();
 
-        setBarPosition();
+        if (!Enabled)
+        {
+            reoderConnectedVertex();
 
-        Enabled = true;
+            setBarPosition();
+
+            Enabled = true;
+        }
+      
     }
 
     public void GraphToggle()
@@ -419,14 +424,21 @@ public class TensileVertex : MonoBehaviour
 
     public void AddEdgeObjs(TensileEdge Eobj)
     {
+        if(!connectedEdgeObjs.Contains(Eobj))
         connectedEdgeObjs.Add(Eobj);
     }
 
     public void AddConnectedVertObjInLayer(TensileVertex v)
     {
-
+        if(!connectedVertInLayerDefOrder.Contains(v))
         connectedVertInLayerDefOrder.Add(v);
+        v.AddConnectedVertObjInLayerOnce(this);
+    }
 
+    public void AddConnectedVertObjInLayerOnce(TensileVertex v)
+    {
+        if (!connectedVertInLayerDefOrder.Contains(v))
+            connectedVertInLayerDefOrder.Add(v);
     }
 
     public IEnumerable<TensileVertex> GetConnectedVertexObj()
@@ -473,7 +485,7 @@ public class TensileVertex : MonoBehaviour
 
 
 
-    public void SetupStructure(int _scale, int _state, int _index)
+    public void SetupStructure(float _scale, int _state, int _index)
     {
         Scale = _scale;
         transform.localScale *= Scale;
@@ -514,6 +526,8 @@ public class TensileVertex : MonoBehaviour
             if (SubState == 1)//Show all structure
             {
                 clean();
+
+                print(connectedVertexsInCounterClockwise.Count);
                 if (connectedVertexsInCounterClockwise.Count == 6)
                 {
                     ContstructBar();
