@@ -821,6 +821,8 @@ public class TriangleBoundryGraphManager : MonoBehaviour
 
         var graph = _edgeGraph.edgeGraph;
 
+        
+
         for (int i = 0; i < graph.EdgeCount; i++)
         {
             int S = graph.GetStartVertex(i);

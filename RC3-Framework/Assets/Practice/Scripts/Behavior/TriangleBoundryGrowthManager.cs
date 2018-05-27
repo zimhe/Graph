@@ -69,6 +69,7 @@ public class TriangleBoundryGrowthManager : MonoBehaviour
 
     public void ResetGrowth()
     {
+        
        
     }
 

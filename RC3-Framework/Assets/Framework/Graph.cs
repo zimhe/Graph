@@ -62,7 +62,7 @@ namespace RC3
             _adj.Add(new List<int>(capacity));
         }
 
-
+        
         /// <summary>
         /// Adds an edge between the two given vertices.
         /// </summary>

@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Practice/Scenes/06_EdgeGrowth.unity
+- path: Assets/Practice/Scenes/07_Icosahedron.unity
   isLoaded: 1
   isActive: 1
