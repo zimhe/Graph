@@ -11,12 +11,15 @@ namespace RC3.Unity
     /// <summary>
     /// 
     /// </summary>
-    public class SharedEdgeGraph<V, E,TV,TE,TT> : ScriptableObject
+    public class SharedEdgeGraph<V, E,TV,TE,TT,TI> : ScriptableObject
         where V : VertexObject
         where E : EdgeObject
         where TV : TensileVertex
         where TE: TensileEdge
         where TT: TensileTriangle
+        where TI:TensileIcosaVertex
+
+
     {
         private EdgeGraph _graph;
         private List<V> _vertexObjs;
@@ -24,6 +27,7 @@ namespace RC3.Unity
         private List<TV> _tensileVertexObj;
         private List<TE> _tensileEdgeObj;
         private List<TT> _tensileTriangle;
+        private List<TI> _tensileIcosaObj;
 
         /// <summary>
         /// 
@@ -65,6 +69,11 @@ namespace RC3.Unity
         {
             get { return _tensileTriangle; }
         }
+        public List<TI> TensileIcosahedron
+        {
+            get { return _tensileIcosaObj; }
+        }
+
 
 
         /// <summary>
@@ -78,6 +87,7 @@ namespace RC3.Unity
             _tensileEdgeObj=new List<TE>(_graph.EdgeCount);
             _tensileVertexObj=new List<TV>(_graph.VertexCount);
             _tensileTriangle=new List<TT>();
+            _tensileIcosaObj=new List<TI>(_graph.VertexCount);
         }
     }
 }

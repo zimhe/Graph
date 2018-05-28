@@ -12,5 +12,5 @@ namespace RC3.Unity.Examples.DendriticGrowth
     /// 
     /// </summary>
     [CreateAssetMenu(menuName = "Objects/DendriticGrowth/SharedEdgeGraph")]
-    public class SharedEdgeGraph : SharedEdgeGraph<VertexObject, EdgeObject,TensileVertex,TensileEdge,TensileTriangle> { }
+    public class SharedEdgeGraph : SharedEdgeGraph<VertexObject, EdgeObject,TensileVertex,TensileEdge,TensileTriangle,TensileIcosaVertex> { }
 }
