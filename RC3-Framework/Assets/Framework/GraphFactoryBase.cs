@@ -112,7 +112,7 @@ namespace RC3
 
             return g;
         }
-        public G CreateTriangleGrid3D(int countX, int countZ,int countY)
+        public G CreateTriangleGrid3D(int countX,int countY, int countZ)
         {
             var g = Create();
             int n = countX * countZ * countY;

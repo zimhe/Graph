@@ -17,9 +17,13 @@ public class TensileIcosaVertex : MonoBehaviour
     [SerializeField] private StaticBar barPrefab;
 
     [SerializeField] private Color defualtColor;
+    [SerializeField] private Color SourceColor;
     [SerializeField] private Color state1Color;
     [SerializeField] private Color state2Color;
     [SerializeField] private Color state3Color;
+
+    private float SourceScale = 0.1f;
+
 
     List<StaticBar> AllBars=new List<StaticBar>(6);
 
@@ -30,7 +34,8 @@ public class TensileIcosaVertex : MonoBehaviour
     TensileIcosaVertex [] Neighbors=new TensileIcosaVertex[8];
     Vector3[] LP = new Vector3[8];
 
-    public void SetNeighbor(int index, TensileIcosaVertex _v)
+
+    public void AddNeighbor(int index, TensileIcosaVertex _v)
     {
         Neighbors[index] = _v;
     }
@@ -55,7 +60,17 @@ public class TensileIcosaVertex : MonoBehaviour
 
     public float Scale { get; set; }
 
-    public bool Flip { get; set; }
+    private bool Flip;
+
+    public void setFlip(bool _flip)
+    {
+        Flip = _flip;
+        UpdatePoints();
+        UpdatePositionImmediate();
+        Vertex.GetComponent<MeshRenderer>().material.color = defualtColor;
+
+        gameObject.name = "IcosaVertex :" + Index + "/ Flip :" + Flip;
+    }
 
     private float edgeLength;
 
@@ -65,7 +80,13 @@ public class TensileIcosaVertex : MonoBehaviour
 
     #endregion
 
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="_a"></param>
+    /// <param name="_b"></param>
+    /// <param name="_c"></param>
+    /// <returns></returns>
     Vector3 GetCircumCenter(Vector3 _a, Vector3 _b, Vector3 _c)
     {
         Vec3d A=new Vec3d(_a.x,_a.y,_a.z);
@@ -157,104 +178,112 @@ public class TensileIcosaVertex : MonoBehaviour
 
         BPoints[5] = Instantiate(PointPfb, transform);
         BPoints[5].transform.localPosition = SavedBPos[5] = new Vector3(edgeLength / 2f, H2, zb0);
+
+        APoints.ToList().ForEach(p => { p.localScale = Scale * Vector3.one * 0.01f; });
+        BPoints.ToList().ForEach(p => { p.localScale = Scale * Vector3.one * 0.01f; });
+
     }
 
 
     /// <summary>
     /// 
     /// </summary>
-    void UpdatePoints()
+public  void UpdatePoints()
     {
-        Vector3[] NP = new Vector3[8];
+        Vector3[] NPA = new Vector3[8];
+
 
         float Lt = edgeLength / Scale;
         float Ht = H1 / H2;
 
         if (Neighbors[0] != null && Neighbors[2] != null)
         {
+
             var n0 = Neighbors[0].transform.localPosition;
             var n2 = Neighbors[2].transform.localPosition;
-            NP[0] = GetCircumCenter(n0, n2, transform.localPosition);
+
+            NPA[0] = transform.parent.TransformPoint(GetCircumCenter(n0, n2, transform.localPosition));
         }
         else
         {
-         NP[0]=new Vector3(SavedAPos[0].x,transform.localPosition.y,SavedAPos[0].z);
+         NPA[0]=transform.TransformPoint(new Vector3(SavedAPos[0].x,0f,SavedAPos[0].z));
         }
 
         if (Neighbors[0] != null && Neighbors[1] != null)
         {
             var n0 = Neighbors[0].transform.localPosition;
             var n1 = Neighbors[1].transform.localPosition;
-            NP[1] = GetCircumCenter(n0, n1, transform.localPosition);
+            NPA[1] = transform.parent.TransformPoint(GetCircumCenter(n0, n1, transform.localPosition));
         }
         else
         {
-            NP[1] = new Vector3(SavedAPos[1].x, transform.localPosition.y, SavedAPos[1].z);
+            NPA[1] = transform.TransformPoint(new Vector3(SavedAPos[1].x, 0f, SavedAPos[1].z));
         }
         if (Neighbors[1] != null && Neighbors[3] != null)
         {
             var n1 = Neighbors[1].transform.localPosition;
             var n3 = Neighbors[3].transform.localPosition;
-            NP[2] = GetCircumCenter(n1, n3, transform.localPosition);
+            NPA[2] = transform.parent.TransformPoint(GetCircumCenter(n1, n3, transform.localPosition));
         }
         else
         {
-            NP[2] = new Vector3(SavedAPos[2].x, transform.localPosition.y, SavedAPos[2].z);
+            NPA[2] = transform.TransformPoint(new Vector3(SavedAPos[2].x, 0f, SavedAPos[2].z));
         }
         if (Neighbors[2] != null && Neighbors[4] != null)
         {
             var n2 = Neighbors[2].transform.localPosition;
             var n4 = Neighbors[4].transform.localPosition;
-            NP[3] = GetCircumCenter(n2, n4, transform.localPosition);
+            NPA[3] = transform.parent.TransformPoint(GetCircumCenter(n2, n4, transform.localPosition));
         }
         else
         {
-            NP[3] = new Vector3(SavedAPos[3].x, transform.localPosition.y, SavedAPos[3].z);
+            NPA[3] = transform.TransformPoint(new Vector3(SavedAPos[3].x, 0f, SavedAPos[3].z));
         }
         if (Neighbors[4] != null && Neighbors[5] != null)
         {
             var n4 = Neighbors[4].transform.localPosition;
             var n5 = Neighbors[5].transform.localPosition;
-            NP[4] = GetCircumCenter(n4, n5, transform.localPosition);
+            NPA[4] = transform.parent.TransformPoint(GetCircumCenter(n4, n5, transform.localPosition));
         }
         else
         {
-            NP[4] = new Vector3(SavedAPos[4].x, transform.localPosition.y, SavedAPos[4].z);
+            NPA[4] = transform.TransformPoint(new Vector3(SavedAPos[4].x, 0f, SavedAPos[4].z));
         }
         if (Neighbors[3] != null && Neighbors[5] != null)
         {
             var n3 = Neighbors[3].transform.localPosition;
             var n5 = Neighbors[5].transform.localPosition;
-            NP[5] = GetCircumCenter(n3, n5, transform.localPosition);
+            NPA[5] = transform.parent.TransformPoint(GetCircumCenter(n3, n5, transform.localPosition));
         }
         else
         {
-            NP[5] = new Vector3(SavedAPos[5].x, transform.localPosition.y, SavedAPos[5].z);
+            NPA[5] = transform.TransformPoint(new Vector3(SavedAPos[5].x, 0f, SavedAPos[5].z));
         }
 
 
         if (Neighbors[6] != null)
         {
-            NP[6] = 0.5f * (Neighbors[7].transform.localPosition + transform.localPosition);
+            NPA[6] = transform.parent.TransformPoint(new Vector3(0f, 0.5f * (Neighbors[6].transform.localPosition + transform.localPosition).y,0f));
         }
         else
         {
-            NP[6]=new Vector3(0f,transform.localPosition.y+H2,0f);
+            NPA[6]=transform.parent.TransformPoint(new Vector3(0f,transform.localPosition.y+H2,0f));
         }
 
         if (Neighbors[7] != null)
         {
-            NP[7] = 0.5f * (Neighbors[8].transform.localPosition + transform.localPosition);
+            NPA[7] = transform.parent.TransformPoint(new Vector3(0f, 0.5f * (Neighbors[7].transform.localPosition + transform.localPosition).y,0f));
         }
         else
         {
-            NP[7] = new Vector3(0f, transform.localPosition.y - H2, 0f);
+            NPA[7] = transform.parent.TransformPoint(new Vector3(0f, transform.localPosition.y - H2, 0f));
         }
 
-        foreach (var p in NP)
+        foreach (var p in NPA)
         {
-            LP[Array.IndexOf(NP,p)] = transform.InverseTransformPoint(transform.parent.TransformPoint(p));
+            LP[Array.IndexOf(NPA,p)] = transform.InverseTransformPoint(p);
         }
+
 
         float py0;
         float py1;
@@ -275,23 +304,68 @@ public class TensileIcosaVertex : MonoBehaviour
                 break;
         }
 
+
+
+
         currentAPos[0]=new Vector3(LP[0].x,py0*Ht,LP[0].z);
-        currentBPos[0]=new Vector3(LP[0].x*Lt,py1,LP[0].z*Lt);
-
         currentAPos[1]=new Vector3(LP[1].x,py1*Ht,LP[1].z);
-        currentBPos[1]=new Vector3(LP[1].x*Lt,py0,LP[1].z*Lt);
-
         currentAPos[2] = new Vector3(LP[2].x, py0 * Ht, LP[2].z);
-        currentBPos[2] = new Vector3(LP[2].x * Lt, py1, LP[2].z * Lt);
-
         currentAPos[3] = new Vector3(LP[3].x, py1 * Ht, LP[3].z);
-        currentBPos[3] = new Vector3(LP[3].x * Lt, py0, LP[3].z * Lt);
-
         currentAPos[4] = new Vector3(LP[4].x, py0 * Ht, LP[4].z);
-        currentBPos[4] = new Vector3(LP[4].x * Lt, py1, LP[4].z * Lt);
-
         currentAPos[5] = new Vector3(LP[5].x, py1 * Ht, LP[5].z);
-        currentBPos[5] = new Vector3(LP[5].x * Lt, py0, LP[5].z * Lt);
+
+
+        switch (Flip)
+        {
+            case false:
+                currentBPos[0] = new Vector3(LP[0].x * Lt, py1, LP[0].z * Lt);
+                currentBPos[2] = new Vector3(LP[2].x * Lt, py1, LP[2].z * Lt);
+                currentBPos[4] = new Vector3(LP[4].x * Lt, py1, LP[4].z * Lt);
+
+                if (Neighbors[6] != null)
+                {
+                    currentBPos[1] = transform.InverseTransformPoint(Neighbors[6].transform.TransformPoint(Neighbors[6].GetCurrentPosB()[1]));
+                    currentBPos[3] = transform.InverseTransformPoint(Neighbors[6].transform.TransformPoint(Neighbors[6].GetCurrentPosB()[3]));
+                    currentBPos[5] = transform.InverseTransformPoint(Neighbors[6].transform.TransformPoint(Neighbors[6].GetCurrentPosB()[5]));
+                }
+                else
+                {
+                    currentBPos[1] = new Vector3(LP[1].x * Lt, py0, LP[1].z * Lt);
+                    currentBPos[3] = new Vector3(LP[3].x * Lt, py0, LP[3].z * Lt);
+                    currentBPos[5] = new Vector3(LP[5].x * Lt, py0, LP[5].z * Lt);
+                }
+           
+                break;
+
+            case true:
+                currentBPos[1] = new Vector3(LP[1].x * Lt, py0, LP[1].z * Lt);
+                currentBPos[3] = new Vector3(LP[3].x * Lt, py0, LP[3].z * Lt);
+                currentBPos[5] = new Vector3(LP[5].x * Lt, py0, LP[5].z * Lt);
+
+                if (Neighbors[6] != null)
+                {
+                    currentBPos[0] = transform.InverseTransformPoint(Neighbors[6].transform.TransformPoint(Neighbors[6].GetCurrentPosB()[0]));
+                    currentBPos[2] = transform.InverseTransformPoint(Neighbors[6].transform.TransformPoint(Neighbors[6].GetCurrentPosB()[2]));
+                    currentBPos[4] = transform.InverseTransformPoint(Neighbors[6].transform.TransformPoint(Neighbors[6].GetCurrentPosB()[4]));
+                }
+                else
+                {
+                    currentBPos[0] = new Vector3(LP[0].x * Lt, py1, LP[0].z * Lt);
+                    currentBPos[2] = new Vector3(LP[2].x * Lt, py1, LP[2].z * Lt);
+                    currentBPos[4] = new Vector3(LP[4].x * Lt, py1, LP[4].z * Lt);
+                }
+                break;
+        }
+
+    }
+
+    public Vector3[] GetCurrentPosB()
+    {
+        return currentBPos;
+    }
+    public Vector3[] GetCurrentPosA()
+    {
+        return currentAPos;
     }
 
     void clean()
@@ -339,6 +413,7 @@ public class TensileIcosaVertex : MonoBehaviour
     }
     void updateBars()
     {
+        
        AllBars[0].UpdateBar(b0[0].localPosition,b0[1].localPosition);
         AllBars[1].UpdateBar(b1[0].localPosition, b1[1].localPosition);
         AllBars[2].UpdateBar(b2[0].localPosition, b2[1].localPosition);
@@ -352,9 +427,15 @@ public class TensileIcosaVertex : MonoBehaviour
 
     #region StateManage
 
-    
+    public int GetState()
+    {
+        return State;
+    }
+    public int GetSubState()
+    {
+        return SubState;
+    }
 
- 
     private int State;
 
     private int SubState;
@@ -368,9 +449,32 @@ public class TensileIcosaVertex : MonoBehaviour
                 clean();
                 if (!Vertex.GetComponent<MeshRenderer>().enabled)
                     Vertex.GetComponent<MeshRenderer>().enabled = true;
+
+                Vertex.GetComponent<MeshRenderer>().material.color = defualtColor;
+                Vertex.transform.localScale = 0.05f * Vector3.one;
+
+                APoints.ToList().ForEach(p => { p.GetComponent<MeshRenderer>().enabled = false; });
+                BPoints.ToList().ForEach(p => { p.GetComponent<MeshRenderer>().enabled = false; });
+
                 break;
 
             case 1:
+                clean();
+
+                if (!Vertex.GetComponent<MeshRenderer>().enabled)
+                    Vertex.GetComponent<MeshRenderer>().enabled = true;
+
+                Vertex.GetComponent<MeshRenderer>().material.color = SourceColor;
+                Vertex.transform.localScale = Vector3.one * SourceScale;
+
+                APoints.ToList().ForEach(p => { p.GetComponent<MeshRenderer>().enabled = false; });
+                BPoints.ToList().ForEach(p => { p.GetComponent<MeshRenderer>().enabled = false; });
+
+
+
+                break;
+
+            case 2:
 
                 if (Vertex.GetComponent<MeshRenderer>().enabled)
                     Vertex.GetComponent<MeshRenderer>().enabled = false;
@@ -448,7 +552,6 @@ public class TensileIcosaVertex : MonoBehaviour
                 if (AllBars.Count == 0)
                 {
                     setBars();
-                    print("setbars");
                 }
                 else
                 {
@@ -470,7 +573,7 @@ public class TensileIcosaVertex : MonoBehaviour
     /// <param name="_state"></param>
     /// <param name="_thickness"></param>
     /// <param name="_scale"></param>
-    public void SetUpStructure(int _index,int _state,float _thickness,float _scale,bool _flip)
+    public void SetupStructure(int _index,int _state,float _thickness,float _scale,bool _flip)
     {
         Index = _index;
         State = _state;
@@ -481,6 +584,8 @@ public class TensileIcosaVertex : MonoBehaviour
 
         Vertex = Instantiate(VertexPrefab, transform);
         Vertex.transform.localPosition=Vector3.zero;
+
+        gameObject.name = "IcosaVertex :" + Index + "/ Flip :" + Flip;
 
         UpdateState();
 
@@ -494,16 +599,27 @@ public class TensileIcosaVertex : MonoBehaviour
 
         for (int i = 0; i < APoints.Length; i++)
         {
-            APoints[i].transform.localPosition =
-                Vector3.Lerp(APoints[i].transform.localPosition, currentAPos[i], Time.deltaTime);
-            BPoints[i].transform.localPosition =
-                Vector3.Lerp(BPoints[i].transform.localPosition, currentBPos[i], Time.deltaTime);
+            APoints[i].transform.localPosition = currentAPos[i];
+
+            BPoints[i].transform.localPosition = currentBPos[i];
+
+        }
+        UpdateState();
+    }/// <summary>
+    /// 
+    /// </summary>
+    public void UpdatePositionImmediate()
+    {
+
+        for (int i = 0; i < APoints.Length; i++)
+        {
+            APoints[i].transform.localPosition = currentAPos[i];
+
+            BPoints[i].transform.localPosition = currentBPos[i];
+
         }
         UpdateState();
     }
-
-
-  
 
     /// <summary>
     /// 
@@ -525,5 +641,22 @@ public class TensileIcosaVertex : MonoBehaviour
         SubState = _subState;
         UpdateState();
     }
+
+    public void SetSubstate( int _subState)
+    {
+        SubState = _subState;
+        UpdateState();
+    }
     #endregion
+
+
+    private void Update()
+    {
+       
+        UpdatePoints();
+
+        UpdatePosition();
+
+      
+    }
 }

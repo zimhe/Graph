@@ -38,10 +38,6 @@ public class HexigonGrowthManager : MonoBehaviour
     private int countZ;
 
 
-
-   
-
-
     void  getShortestSourcePath()
     {
         if (GraphDone == true)
@@ -543,7 +539,7 @@ public class HexigonGrowthManager : MonoBehaviour
 
                 foreach (var vi in _graph.GetConnectedVertices(vertex))
                 {
-
+                   
                     int target = T[S_Inx];
 
                 
