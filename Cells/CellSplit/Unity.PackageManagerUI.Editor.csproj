@@ -311,10 +311,10 @@
       <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="SpatialSlur">
-      <HintPath>Assets/Extensions/SpatialSlur/SpatialSlur.dll</HintPath>
+      <HintPath>Assets/Extensions/SpatialSlur/0_3_0/SpatialSlur.dll</HintPath>
     </Reference>
     <Reference Include="System.ValueTuple">
-      <HintPath>Assets/Extensions/SpatialSlur/System.ValueTuple.dll</HintPath>
+      <HintPath>Assets/Extensions/SpatialSlur/0_3_0/System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Collections">
       <HintPath>Assets/Extensions/SpatialSlur/References/System.Collections.dll</HintPath>
@@ -727,6 +727,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Extensions\Gumball\Material\Shader\FrontLightingShader.shader" />
+    <None Include="Assets\Extensions\SDF Demo\Shaders\ScalarField 1.shader" />
+    <None Include="Assets\Extensions\SDF Demo\Shaders\ScalarField.shader" />
     <None Include="C:\Users\zim\AppData\Local\Unity\cache\packages\packages.unity.com\com.unity.package-manager-ui@1.8.8\Editor\Resources\Styles\Main_Dark.uss" />
     <None Include="C:\Users\zim\AppData\Local\Unity\cache\packages\packages.unity.com\com.unity.package-manager-ui@1.8.8\Editor\Resources\Styles\Main_Light.uss" />
     <None Include="C:\Users\zim\AppData\Local\Unity\cache\packages\packages.unity.com\com.unity.package-manager-ui@1.8.8\Editor\Resources\Templates\Alert.uxml" />

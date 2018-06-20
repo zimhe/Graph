@@ -272,10 +272,10 @@
       <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="SpatialSlur">
-      <HintPath>Assets/Extensions/SpatialSlur/SpatialSlur.dll</HintPath>
+      <HintPath>Assets/Extensions/SpatialSlur/0_3_0/SpatialSlur.dll</HintPath>
     </Reference>
     <Reference Include="System.ValueTuple">
-      <HintPath>Assets/Extensions/SpatialSlur/System.ValueTuple.dll</HintPath>
+      <HintPath>Assets/Extensions/SpatialSlur/0_3_0/System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Collections">
       <HintPath>Assets/Extensions/SpatialSlur/References/System.Collections.dll</HintPath>
@@ -646,8 +646,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\001_Cells\Script\Behavior\ReproductionManager.cs" />
     <Compile Include="Assets\001_Cells\Script\Cells\CellEdge.cs" />
     <Compile Include="Assets\001_Cells\Script\Cells\Cells.cs" />
+    <Compile Include="Assets\001_Cells\Script\Cells\StaticBar.cs" />
+    <Compile Include="Assets\001_Cells\Script\Cells\StaticStrings.cs" />
     <Compile Include="Assets\001_Cells\Script\Cells\Tetrahedron.cs" />
     <Compile Include="Assets\001_Cells\Script\Cells\TetrahedronGrid.cs" />
     <Compile Include="Assets\001_Cells\Script\Cells\Triangle.cs" />
@@ -670,6 +673,7 @@
     <Compile Include="Assets\Extensions\Framework\IEdgeGraph.cs" />
     <Compile Include="Assets\Extensions\Framework\IGraph.cs" />
     <Compile Include="Assets\Extensions\Framework\ISelectionHandler.cs" />
+    <Compile Include="Assets\Extensions\Framework\Objects\Shared.cs" />
     <Compile Include="Assets\Extensions\Framework\Objects\SharedEdgeGraph.cs" />
     <Compile Include="Assets\Extensions\Framework\Objects\SharedFloats.cs" />
     <Compile Include="Assets\Extensions\Framework\Objects\SharedGraph.cs" />
@@ -681,9 +685,33 @@
     <Compile Include="Assets\Extensions\Gumball\Scripts\GumBall.cs" />
     <Compile Include="Assets\Extensions\Gumball\Scripts\ObjectForSelect.cs" />
     <Compile Include="Assets\Extensions\Gumball\Scripts\SelectiveObject.cs" />
+    <Compile Include="Assets\Extensions\SDF Demo\Scripts\Behaviors\Fields\Abstract\ScalarField.cs" />
+    <Compile Include="Assets\Extensions\SDF Demo\Scripts\Behaviors\Fields\Difference.cs" />
+    <Compile Include="Assets\Extensions\SDF Demo\Scripts\Behaviors\Fields\ImplicitSurface.cs" />
+    <Compile Include="Assets\Extensions\SDF Demo\Scripts\Behaviors\Fields\Intersection.cs" />
+    <Compile Include="Assets\Extensions\SDF Demo\Scripts\Behaviors\Fields\Repeat.cs" />
+    <Compile Include="Assets\Extensions\SDF Demo\Scripts\Behaviors\Fields\ScalarFieldViewer.cs" />
+    <Compile Include="Assets\Extensions\SDF Demo\Scripts\Behaviors\Fields\SignedBox.cs" />
+    <Compile Include="Assets\Extensions\SDF Demo\Scripts\Behaviors\Fields\SignedTorus.cs" />
+    <Compile Include="Assets\Extensions\SDF Demo\Scripts\Behaviors\Fields\Union.cs" />
+    <Compile Include="Assets\Extensions\SDF Demo\Scripts\Behaviors\Move.cs" />
+    <Compile Include="Assets\Extensions\SDF Demo\Scripts\Behaviors\Spin.cs" />
+    <Compile Include="Assets\Extensions\SDF Demo\Scripts\IField.cs" />
+    <Compile Include="Assets\Extensions\SDF Demo\Scripts\Util.cs" />
+    <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\ConstantField3d.cs" />
+    <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\DistanceToPointEvaluator.cs" />
+    <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\FaceEvaluator.cs" />
+    <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\GrowthManager.cs" />
+    <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\HeMesh3dCreator.cs" />
+    <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\RandomField3d.cs" />
+    <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\ScalarField3d.cs" />
+    <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Objects\SharedHeMesh3d.cs" />
+    <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Tetra.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Extensions\Gumball\Material\Shader\FrontLightingShader.shader" />
+    <None Include="Assets\Extensions\SDF Demo\Shaders\ScalarField 1.shader" />
+    <None Include="Assets\Extensions\SDF Demo\Shaders\ScalarField.shader" />
     <None Include="C:\Users\zim\AppData\Local\Unity\cache\packages\packages.unity.com\com.unity.package-manager-ui@1.8.8\Editor\Resources\Styles\Main_Dark.uss" />
     <None Include="C:\Users\zim\AppData\Local\Unity\cache\packages\packages.unity.com\com.unity.package-manager-ui@1.8.8\Editor\Resources\Styles\Main_Light.uss" />
     <None Include="C:\Users\zim\AppData\Local\Unity\cache\packages\packages.unity.com\com.unity.package-manager-ui@1.8.8\Editor\Resources\Templates\Alert.uxml" />

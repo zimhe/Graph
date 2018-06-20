@@ -413,14 +413,12 @@ public  void UpdatePoints()
     }
     void updateBars()
     {
-        
        AllBars[0].UpdateBar(b0[0].localPosition,b0[1].localPosition);
         AllBars[1].UpdateBar(b1[0].localPosition, b1[1].localPosition);
         AllBars[2].UpdateBar(b2[0].localPosition, b2[1].localPosition);
         AllBars[3].UpdateBar(b3[0].localPosition, b3[1].localPosition);
         AllBars[4].UpdateBar(b4[0].localPosition, b4[1].localPosition);
         AllBars[5].UpdateBar(b5[0].localPosition, b5[1].localPosition);
-
     }
     #endregion
 
