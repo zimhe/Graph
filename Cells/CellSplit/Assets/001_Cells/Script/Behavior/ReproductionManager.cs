@@ -206,7 +206,7 @@ namespace RC3.Unity.TetrahedralGrowth
             var v = _mesh.PokeFace(face);
             v.Position = p;
 
-           GrowCell((Vector3)p,(float)dist*1.5f);
+           //GrowCell((Vector3)p,(float)dist*1.5f);
             // cache tetrahedron
             // AddTetrahedron(face, v);
 
@@ -221,7 +221,7 @@ namespace RC3.Unity.TetrahedralGrowth
 
             int substate = rdm.Next(0, 2);
             
-            cell.Initialize(_allCells.Count-1,0,substate,_thickness,size,false);
+            cell.Initialize(_allCells.Count-1,2,substate,_thickness,size,false);
 
             _allCells.Add(cell);
         }

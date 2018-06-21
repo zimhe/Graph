@@ -699,12 +699,14 @@
     <Compile Include="Assets\Extensions\SDF Demo\Scripts\IField.cs" />
     <Compile Include="Assets\Extensions\SDF Demo\Scripts\Util.cs" />
     <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\ConstantField3d.cs" />
-    <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\DistanceToPointEvaluator.cs" />
+    <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\DistanceToPointEvaluator1.cs" />
     <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\FaceEvaluator.cs" />
     <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\GrowthManager.cs" />
     <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\HeMesh3dCreator.cs" />
     <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\RandomField3d.cs" />
     <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\ScalarField3d.cs" />
+    <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\TerrainEvaluator.cs" />
+    <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Behaviors\TerrainHeightEvaluator.cs" />
     <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Objects\SharedHeMesh3d.cs" />
     <Compile Include="Assets\Extensions\Tetrahedral Growth\Scripts\Tetra.cs" />
   </ItemGroup>
